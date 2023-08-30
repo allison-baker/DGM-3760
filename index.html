@@ -8,7 +8,7 @@
     <meta name="author" content="Al Baker" />
 
     <!-- STYLE SHEETS -->
-    <link href="css/styles.css" rel="stylesheet"/>
+    <link href="css/styles.css" rel="stylesheet" />
 
     <!-- FAVICON STUFF -->
 
@@ -19,9 +19,26 @@
       <h1>To Do App</h1>
       <h2>Al Baker, DGM 3760</h2>
     </header>
-    <main></main>
+    <main>
+      <div id="gallery">
+        <form id="newTask">
+          <label for="name">Task Name <input type="text" name="name" id="taskName" placeholder="Task Name" /></label>
+          <label for="description"
+            >Task Description <input type="text" name="description" id="taskDescription" placeholder="Task Description"
+          /></label>
+          <label for="category">Category</label>
+          <select name="category" id="taskCategory">
+            <option value="Homework">School</option>
+            <option value="Chores">Chores</option>
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+          </select>
+        </form>
+      </div>
+    </main>
     <footer>
       <p>&copy; 2023 &bull; Al Baker</p>
     </footer>
+    <script src="js/scripts.js"></script>
   </body>
 </html>
