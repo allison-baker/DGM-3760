@@ -20,21 +20,28 @@
       <h2>Al Baker, DGM 3760</h2>
     </header>
     <main>
-      <div id="gallery">
-        <form id="newTask">
-          <label for="name">Task Name <input type="text" name="name" id="taskName" placeholder="Task Name" /></label>
-          <label for="description"
-            >Task Description <input type="text" name="description" id="taskDescription" placeholder="Task Description"
+      <section id="forms">
+        <form id="newTask" method="POST">
+          <label for="taskName"
+            >Task Name <input type="text" name="taskName" id="taskName" placeholder="Task Name" value=""
           /></label>
-          <label for="category">Category</label>
-          <select name="category" id="taskCategory">
-            <option value="Homework">School</option>
+          <label for="taskDescription"
+            >Task Description
+            <textarea name="taskDescription" id="taskDescription" placeholder="Task Description"></textarea>
+          </label>
+          <label for="taskCategory">Category</label>
+          <select name="taskCategory" id="taskCategory">
+            <option value="Homework">Homework</option>
             <option value="Chores">Chores</option>
             <option value="Work">Work</option>
             <option value="Personal">Personal</option>
           </select>
+          <label for="taskDate">Due Date<input type="date" name="taskDate" id="taskDate" /></label>
+          <input type="submit" value="Create Task" id="createTask"/>
         </form>
-      </div>
+      </section>
+
+      <section id="gallery"></section>
     </main>
     <footer>
       <p>&copy; 2023 &bull; Al Baker</p>
