@@ -18,39 +18,35 @@ let categories = [
 ]
 let tasks = [
   {
-    name: "Sample To Do",
+    name: "JS To Do App",
     status: false,
     ID: 0,
     dueDate: "8/30/2023",
-    description: `Create a To Do App: Data model storing all the required information, functions allowing you to edit todos (status, category, due date), 
-      complete todos, delete todos, add/delete categories, and add new todos.`,
+    description: 'Create a To Do App with a data model and functions.',
     category: categories[0],
   },
   {
-    name: "Sample To Do",
+    name: "Clean Bathroom",
     status: false,
-    ID: 0,
+    ID: 1,
     dueDate: "8/30/2023",
-    description: `Create a To Do App: Data model storing all the required information, functions allowing you to edit todos (status, category, due date), 
-      complete todos, delete todos, add/delete categories, and add new todos.`,
+    description: "Deep clean the bathroom: tub, sink, toilet, floors, walls.",
     category: categories[1],
   },
   {
-    name: "Sample To Do",
+    name: "Video Training",
     status: false,
-    ID: 0,
+    ID: 2,
     dueDate: "8/30/2023",
-    description: `Create a To Do App: Data model storing all the required information, functions allowing you to edit todos (status, category, due date), 
-      complete todos, delete todos, add/delete categories, and add new todos.`,
+    description: "Complete ExpandShare video training and track your time to clock in later.",
     category: categories[2],
   },
   {
-    name: "Sample To Do",
+    name: "Hang Art",
     status: false,
-    ID: 0,
+    ID: 3,
     dueDate: "8/30/2023",
-    description: `Create a To Do App: Data model storing all the required information, functions allowing you to edit todos (status, category, due date), 
-      complete todos, delete todos, add/delete categories, and add new todos.`,
+    description: "Buy a frame and hang the art Lana got you in Ireland.",
     category: categories[3],
   },
 ]
@@ -75,29 +71,39 @@ function populateDOM() {
 
   for (let i in tasks) {
     let box = document.createElement("article")
+    let text = document.createElement("div")
     let title = document.createElement("h2")
     let details = document.createElement("p")
     let date = document.createElement("h3")
     let category = document.createElement("h4")
-    let border = tasks[i].category.color
+    let deleteBtn = document.createElement("button")
 
     box.classList.add("taskBox")
-    box.style.borderColor = border
+    box.id = tasks[i].ID
+    box.style.borderColor = tasks[i].category.color
 
     title.textContent = tasks[i].name
 
     details.textContent = tasks[i].description
 
     date.textContent = `Due Date: ${tasks[i].dueDate}`
-    date.style.borderColor = border
+    date.style.borderColor = tasks[i].category.color
 
     category.textContent = `Category: ${tasks[i].category.name}`
     category.style.color = tasks[i].category.color
 
-    box.appendChild(title)
-    box.appendChild(details)
-    box.appendChild(date)
-    box.appendChild(category)
+    deleteBtn.style.backgroundColor = tasks[i].category.color
+    deleteBtn.onclick = function() {removeTask(tasks[i].ID)}
+    deleteBtn.innerText = "X"
+
+    text.appendChild(title)
+    text.appendChild(details)
+    text.appendChild(date)
+    text.appendChild(category)
+
+    box.appendChild(text)
+    box.appendChild(deleteBtn)
+
     gallery.appendChild(box)
   }
 }
@@ -167,4 +173,21 @@ function addCategory(data) {
   }
   categories.push(newCategory)
   populateForm()
+}
+
+let removedTasks = []
+
+function removeTask(removeID) {
+  for (let i in tasks) {
+    if (tasks[i].ID === removeID) {
+      tasks[i].status = true
+      removedTasks.push(tasks[i])
+      let firstHalf = tasks.slice(0, i)
+      let secondHalf = tasks.slice(i+1)
+      let newTaskList = firstHalf.concat(secondHalf)
+      tasks = newTaskList
+      populateDOM()
+      break
+    }
+  }
 }

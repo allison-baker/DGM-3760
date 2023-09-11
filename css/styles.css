@@ -123,20 +123,32 @@ main .formStyling input[type=submit] {
 main section#gallery article.taskBox {
   background-color: white;
   border-radius: 10px;
-  padding: 1rem;
   border-top: 10px solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-main section#gallery article.taskBox h2 {
+main section#gallery article.taskBox div {
+  padding: 1rem;
+}
+main section#gallery article.taskBox div h2 {
   color: var(--darkPurple);
   margin-bottom: 0.5rem;
 }
-main section#gallery article.taskBox h3 {
+main section#gallery article.taskBox div h3 {
   margin-top: 1rem;
   border-top: 2px solid;
   padding-top: 0.5rem;
 }
-main section#gallery article.taskBox h4 {
+main section#gallery article.taskBox div h4 {
   margin-top: 0.25rem;
+}
+main section#gallery article.taskBox button {
+  margin-top: 0.25rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0 0 10px 10px;
 }
 
 /* FOOTER STYLING */
