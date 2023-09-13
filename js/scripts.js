@@ -183,7 +183,8 @@ function removeTask(removeID) {
       tasks[i].status = true
       removedTasks.push(tasks[i])
       let firstHalf = tasks.slice(0, i)
-      let secondHalf = tasks.slice(i+1)
+      let secondHalf = tasks.slice(i)
+      secondHalf.shift()
       let newTaskList = firstHalf.concat(secondHalf)
       tasks = newTaskList
       populateDOM()
