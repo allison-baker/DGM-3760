@@ -31,9 +31,8 @@
               <textarea name="taskDescription" id="taskDescription" placeholder="Task Description"></textarea>
             </label>
 
-            <fieldset id="smallSection">
-              <label for="taskCategory">Category
-              <select name="taskCategory" id="taskCategory"></select></label>
+            <fieldset class="smallSection">
+              <label for="taskCategory">Category<select name="taskCategory" id="taskCategory"></select></label>
               <label for="taskDate">Due Date<input type="date" name="taskDate" id="taskDate" /></label>
             </fieldset>
             
@@ -41,13 +40,24 @@
           </form>
         </section>
 
-        <section>
-          <form id="newCategory" class="formStyling" method="POST">
-            <label for="categoryName">Category Name <input type="text" name="categoryName" id="categoryName" placeholder="New Category Name" /></label>
-            <label for="categoryColor">Category Color <input type="color" name="categoryColor" id="categoryColor" value="#c24c8d" /></label>
-            <input type="submit" value="Create Category" id="createCategory">
-          </form>
-        </section>
+        <div>
+          <section>
+            <form id="newCategory" class="formStyling" method="POST">
+              <fieldset class="smallSection">
+                <label for="categoryName">Category Name <input type="text" name="categoryName" id="categoryName" placeholder="New Category Name" /></label>
+                <label for="categoryColor">Category Color <input type="color" name="categoryColor" id="categoryColor" value="#c24c8d" /></label>
+              </fieldset>
+              <input type="submit" value="Create Category" id="createCategory">
+            </form>
+          </section>
+  
+          <section>
+            <form id="deleteCategory" class="formStyling" method="POST">
+              <label for="deleteList">Delete Category<select name="deleteList" id="deleteList"></select></label>
+              <input type="submit" value="Delete Category" id="deleteCatBtn">
+            </form>
+          </section>
+        </div>
       </div>
 
       <section id="gallery"></section>

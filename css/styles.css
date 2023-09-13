@@ -87,7 +87,7 @@ main form#newTask label textarea {
   margin-top: 0.5rem;
   width: 100%;
 }
-main form#newTask select {
+main form#newTask select, main form#deleteCategory select {
   background-color: #eee;
   font-family: 'Courier New', Courier, monospace;
   color: var(--black);
@@ -98,15 +98,18 @@ main form#newTask select {
   font-size: 1rem;
   width: 100%;
 }
-main form#newTask #smallSection {
+main form fieldset.smallSection {
   display: grid;
   grid-template-columns: 1fr 1fr;
   border: none;
   grid-gap: 1rem;
 }
 main form#newCategory input[type=color] {
-  height: 8.1rem;
-  width: 8.1rem;
+  padding: 0.25rem;
+  height: 2.15rem;
+}
+main form#deleteCategory {
+  margin-top: 0.95rem;
 }
 main .formStyling input[type=submit] {
   background-color: var(--darkPurple);

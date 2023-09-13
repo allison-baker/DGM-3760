@@ -53,13 +53,21 @@ let tasks = [
 
 function populateForm() {
   let dropdown = document.querySelector("#taskCategory")
-  dropdown.innerHTML = "<option value=''>-Please Select-</option>"
+  let deleteDropdown = document.querySelector("#deleteList")
+  dropdown.innerHTML = "<option value=''>-Select a Category-</option>"
+  deleteDropdown.innerHTML = "<option value=''>-Select a Category to Delete-</option>"
 
   for (let i in categories) {
     let option = document.createElement("option")
     option.value = categories[i].name
     option.textContent = categories[i].name
     dropdown.appendChild(option)
+  }
+  for (let i in categories) {
+    let option = document.createElement("option")
+    option.value = categories[i].name
+    option.textContent = categories[i].name
+    deleteDropdown.appendChild(option)
   }
 }
 
@@ -188,6 +196,26 @@ function removeTask(removeID) {
       let newTaskList = firstHalf.concat(secondHalf)
       tasks = newTaskList
       populateDOM()
+      break
+    }
+  }
+}
+
+let removedCategories = []
+
+function deleteCategory(data) {
+  for (let i in categories) {
+    if (categories[i].name === data.name) {
+      console.log(data.name)
+      removedCategories.push(categories[i])
+      let firstHalf = categories.splice(0, i)
+      let secondHalf = categories.splice(i)
+      console.log(firstHalf)
+      console.log(secondHalf)
+      secondHalf.shift
+      /* let newCategories = firstHalf.concat(secondHalf)
+      categories = newCategories
+      populateForm() */
       break
     }
   }
