@@ -146,20 +146,25 @@ function matchCategory(userChoice) {
   }
 }
 
+function taskIndex() {
+  if (tasks.length === 0) return 0
+  else return tasks[tasks.length - 1].ID + 1
+}
+
 function addTask(data) {
   let userCategory = matchCategory(data.taskCategory)
+  let index = taskIndex()
 
   let newTask = {
     name: data.taskName,
     status: false,
-    ID: tasks[tasks.length - 1].ID + 1,
+    ID: taskIndex(),
     dueDate: data.taskDate,
     description: data.taskDescription,
     category: userCategory,
   }
 
   tasks.push(newTask)
-  console.log(tasks)
   populateDOM()
 }
 
@@ -179,11 +184,16 @@ categoryForm.addEventListener("formdata", (event) => {
   categoryForm.reset()
 })
 
+function categoryIndex() {
+  if (categories.length === 0) return 0
+  else return categories[categories.length - 1].ID + 1
+}
+
 function addCategory(data) {
   let newCategory = {
     name: data.categoryName,
     color: data.categoryColor,
-    ID: categories[categories.length - 1].ID + 1,
+    ID: categoryIndex(),
   }
   categories.push(newCategory)
   populateForm()
@@ -225,7 +235,6 @@ function deleteCategory(data) {
   for (let i=0; i<categories.length; i++) {
     if (categories[i].name === data.deleteName) {
       removedCategories.push(categories[i])
-      console.log(removedCategories)
       categories = categories.filter((category) => category.ID != categories[i].ID)
       populateForm()
       break
