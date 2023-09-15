@@ -42,7 +42,7 @@ let tasks = [
     status: false,
     ID: 2,
     dueDate: "8/30/2023",
-    description: "Complete ExpandShare video training and track your time to clock in later.",
+    description: "Complete ExpandShare video training; track time spent.",
     category: categories[2],
   },
   {
@@ -106,7 +106,7 @@ function populateDOM() {
 
     deleteBtn.style.backgroundColor = tasks[i].category.color
     deleteBtn.onclick = function() {removeTask(tasks[i].ID)}
-    deleteBtn.innerText = "X"
+    deleteBtn.innerHTML = '<i class="fa-solid fa-trash-can fa-lg" style="color: #ffffff;"></i>'
 
     text.appendChild(title)
     text.appendChild(details)
