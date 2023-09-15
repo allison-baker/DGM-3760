@@ -2,18 +2,22 @@ let categories = [
   {
     name: "Homework",
     color: "#C75050",
+    ID: 0,
   },
   {
     name: "Chores",
     color: "#97C750",
+    ID: 1,
   },
   {
     name: "Work",
     color: "#50B3C7",
+    ID: 2,
   },
   {
     name: "Personal",
     color: "#7236AB",
+    ID: 3,
   },
 ]
 let tasks = [
@@ -53,7 +57,7 @@ let tasks = [
 
 function populateForm() {
   let dropdown = document.querySelector("#taskCategory")
-  let deleteDropdown = document.querySelector("#deleteList")
+  let deleteDropdown = document.querySelector("#deleteName")
   dropdown.innerHTML = "<option value=''>-Select a Category-</option>"
   deleteDropdown.innerHTML = "<option value=''>-Select a Category to Delete-</option>"
 
@@ -148,13 +152,14 @@ function addTask(data) {
   let newTask = {
     name: data.taskName,
     status: false,
-    ID: tasks.length,
+    ID: tasks[tasks.length - 1].ID + 1,
     dueDate: data.taskDate,
     description: data.taskDescription,
     category: userCategory,
   }
 
   tasks.push(newTask)
+  console.log(tasks)
   populateDOM()
 }
 
@@ -178,6 +183,7 @@ function addCategory(data) {
   let newCategory = {
     name: data.categoryName,
     color: data.categoryColor,
+    ID: categories[categories.length - 1].ID + 1,
   }
   categories.push(newCategory)
   populateForm()
@@ -190,32 +196,38 @@ function removeTask(removeID) {
     if (tasks[i].ID === removeID) {
       tasks[i].status = true
       removedTasks.push(tasks[i])
-      let firstHalf = tasks.slice(0, i)
-      let secondHalf = tasks.slice(i)
-      secondHalf.shift()
-      let newTaskList = firstHalf.concat(secondHalf)
-      tasks = newTaskList
+      tasks = tasks.filter((task) => task.ID != removeID)
       populateDOM()
       break
     }
   }
 }
 
+const deleteForm = document.querySelector("#deleteCategory")
+deleteForm.addEventListener("submit", (event) => {
+  event.preventDefault()
+  new FormData(deleteForm)
+})
+
+deleteForm.addEventListener("formdata", (event) => {
+  const data = event.formData
+  let deleteData = {}
+  for (const [key, value] of data) {
+    deleteData[key] = value
+  }
+  deleteCategory(deleteData)
+  deleteForm.reset()
+})
+
 let removedCategories = []
 
 function deleteCategory(data) {
-  for (let i in categories) {
-    if (categories[i].name === data.name) {
-      console.log(data.name)
+  for (let i=0; i<categories.length; i++) {
+    if (categories[i].name === data.deleteName) {
       removedCategories.push(categories[i])
-      let firstHalf = categories.splice(0, i)
-      let secondHalf = categories.splice(i)
-      console.log(firstHalf)
-      console.log(secondHalf)
-      secondHalf.shift
-      /* let newCategories = firstHalf.concat(secondHalf)
-      categories = newCategories
-      populateForm() */
+      console.log(removedCategories)
+      categories = categories.filter((category) => category.ID != categories[i].ID)
+      populateForm()
       break
     }
   }
