@@ -177,7 +177,7 @@ main section#gallery article.taskBox div#textBox h4 {
 }
 main section#gallery article.taskBox div#buttonsBox {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-gap: 0.25rem;
   margin-top: 0.25rem;
 }

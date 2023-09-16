@@ -101,7 +101,7 @@ function populateDOM() {
     let category = document.createElement("h4")
 
     let completeBtn = document.createElement("button")
-    let editBtn = document.createElement("button")
+    // let editBtn = document.createElement("button")
     let deleteBtn = document.createElement("button")
 
     box.classList.add("taskBox")
@@ -113,14 +113,14 @@ function populateDOM() {
     } else {
       title.textContent = tasks[i].name
     }
-    title.isContentEditable = true
+    title.contentEditable = true
 
     details.textContent = tasks[i].description
-    details.isContentEditable = true
+    details.contentEditable = true
 
     date.textContent = `Due Date: ${tasks[i].dueDate}`
     if (tasks[i].status != true) { date.style.borderColor = tasks[i].category.color }
-    date.isContentEditable = true
+    date.contentEditable = true
 
     category.textContent = `Category: ${tasks[i].category.name}`
     if (tasks[i].status != true) { category.style.color = tasks[i].category.color }
@@ -132,9 +132,9 @@ function populateDOM() {
     completeBtn.onclick = function() {markComplete(tasks[i].ID)}
     completeBtn.innerHTML = '<i class="fa-regular fa-circle-check fa-lg" style="color:#ffffff;"></i>'
 
-    if (tasks[i].status != true) { editBtn.style.backgroundColor = tasks[i].category.color }
+    // if (tasks[i].status != true) { editBtn.style.backgroundColor = tasks[i].category.color }
     // Edit button function onclick added
-    editBtn.innerHTML = '<i class="fa-regular fa-pen-to-square fa-lg" style="color: #ffffff;"></i>'
+    // editBtn.innerHTML = '<i class="fa-regular fa-pen-to-square fa-lg" style="color: #ffffff;"></i>'
 
     if (tasks[i].status != true) { deleteBtn.style.backgroundColor = tasks[i].category.color }
     deleteBtn.onclick = function() {removeTask(tasks[i].ID)}
@@ -146,7 +146,7 @@ function populateDOM() {
     text.appendChild(category)
 
     buttons.appendChild(completeBtn)
-    buttons.appendChild(editBtn)
+    // buttons.appendChild(editBtn)
     buttons.appendChild(deleteBtn)
 
     box.appendChild(text)
