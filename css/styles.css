@@ -42,13 +42,42 @@ main div#forms {
   display: grid;
   grid-gap: 1.5rem;
   grid-template-columns: 1fr 1fr;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 main section#gallery {
   display: grid;
   grid-gap: 1.5rem;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: auto;
+}
+main section#listInfo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+main section#listInfo div {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+main section#listInfo div h3#tasksLeft {
+  background-color: var(--black);
+  padding: 0.5rem 0.75rem;
+  color: white;
+  border-radius: 50px;
+}
+main section#listInfo div button {
+  background-color: var(--darkPurple);
+  color: white;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 /* FORM STYLING */
@@ -131,27 +160,38 @@ main section#gallery article.taskBox {
   flex-direction: column;
   justify-content: space-between;
 }
-main section#gallery article.taskBox div {
+main section#gallery article.taskBox div#textBox {
   padding: 1rem;
 }
-main section#gallery article.taskBox div h2 {
+main section#gallery article.taskBox div#textBox h2 {
   color: var(--darkPurple);
   margin-bottom: 0.5rem;
 }
-main section#gallery article.taskBox div h3 {
+main section#gallery article.taskBox div#textBox h3 {
   margin-top: 1rem;
   border-top: 2px solid;
   padding-top: 0.5rem;
 }
-main section#gallery article.taskBox div h4 {
+main section#gallery article.taskBox div#textBox h4 {
   margin-top: 0.25rem;
 }
-main section#gallery article.taskBox button {
+main section#gallery article.taskBox div#buttonsBox {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 0.25rem;
   margin-top: 0.25rem;
-  width: 100%;
+}
+main section#gallery article.taskBox div#buttonsBox button {
   padding: 0.5rem;
+  width: 100%;
   border: none;
-  border-radius: 0 0 10px 10px;
+  background-color: var(--black);
+}
+main section#gallery article.taskBox div#buttonsBox button:first-child {
+  border-radius: 0 0 0 10px;
+}
+main section#gallery article.taskBox div#buttonsBox button:last-child {
+  border-radius: 0 0 10px 0;
 }
 
 /* FOOTER STYLING */

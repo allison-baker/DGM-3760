@@ -77,47 +77,86 @@ function populateForm() {
 
 populateForm()
 
+function numberLeft() {
+  let count = 0
+  for (let i in tasks) {
+    if (tasks[i].status === false) { count++ }
+  }
+  return count
+}
+
 function populateDOM() {
   let gallery = document.querySelector("#gallery")
   gallery.innerHTML = ""
 
   for (let i in tasks) {
     let box = document.createElement("article")
+
     let text = document.createElement("div")
+    let buttons = document.createElement("div")
+
     let title = document.createElement("h2")
     let details = document.createElement("p")
     let date = document.createElement("h3")
     let category = document.createElement("h4")
+
+    let completeBtn = document.createElement("button")
+    let editBtn = document.createElement("button")
     let deleteBtn = document.createElement("button")
 
     box.classList.add("taskBox")
     box.id = tasks[i].ID
-    box.style.borderColor = tasks[i].category.color
+    if (tasks[i].status != true) { box.style.borderColor = tasks[i].category.color }
 
-    title.textContent = tasks[i].name
+    if (tasks[i].status === true) {
+      title.innerHTML = `<del>${tasks[i].name}</del>`
+    } else {
+      title.textContent = tasks[i].name
+    }
+    title.isContentEditable = true
 
     details.textContent = tasks[i].description
+    details.isContentEditable = true
 
     date.textContent = `Due Date: ${tasks[i].dueDate}`
-    date.style.borderColor = tasks[i].category.color
+    if (tasks[i].status != true) { date.style.borderColor = tasks[i].category.color }
+    date.isContentEditable = true
 
     category.textContent = `Category: ${tasks[i].category.name}`
-    category.style.color = tasks[i].category.color
+    if (tasks[i].status != true) { category.style.color = tasks[i].category.color }
 
-    deleteBtn.style.backgroundColor = tasks[i].category.color
+    text.id = "textBox"
+    buttons.id = "buttonsBox"
+
+    if (tasks[i].status != true) { completeBtn.style.backgroundColor = tasks[i].category.color }
+    completeBtn.onclick = function() {markComplete(tasks[i].ID)}
+    completeBtn.innerHTML = '<i class="fa-regular fa-circle-check fa-lg" style="color:#ffffff;"></i>'
+
+    if (tasks[i].status != true) { editBtn.style.backgroundColor = tasks[i].category.color }
+    // Edit button function onclick added
+    editBtn.innerHTML = '<i class="fa-regular fa-pen-to-square fa-lg" style="color: #ffffff;"></i>'
+
+    if (tasks[i].status != true) { deleteBtn.style.backgroundColor = tasks[i].category.color }
     deleteBtn.onclick = function() {removeTask(tasks[i].ID)}
-    deleteBtn.innerHTML = '<i class="fa-solid fa-trash-can fa-lg" style="color: #ffffff;"></i>'
+    deleteBtn.innerHTML = '<i class="fa-regular fa-trash-can fa-lg" style="color: #ffffff;"></i>'
 
     text.appendChild(title)
     text.appendChild(details)
     text.appendChild(date)
     text.appendChild(category)
 
+    buttons.appendChild(completeBtn)
+    buttons.appendChild(editBtn)
+    buttons.appendChild(deleteBtn)
+
     box.appendChild(text)
-    box.appendChild(deleteBtn)
+    box.appendChild(buttons)
 
     gallery.appendChild(box)
   }
+
+  let tasksLeft = document.querySelector("#tasksLeft")
+  tasksLeft.textContent = numberLeft()
 }
 
 populateDOM()
@@ -153,7 +192,6 @@ function taskIndex() {
 
 function addTask(data) {
   let userCategory = matchCategory(data.taskCategory)
-  let index = taskIndex()
 
   let newTask = {
     name: data.taskName,
@@ -199,6 +237,22 @@ function addCategory(data) {
   populateForm()
 }
 
+function markComplete(completeID) {
+  for (let i in tasks) {
+    if (tasks[i].ID === completeID) {
+      tasks[i].status = !tasks[i].status
+      populateDOM()
+      break
+    }
+  }
+}
+
+let clearAll = document.querySelector("#clearTasks")
+clearAll.addEventListener("click", () => {
+  tasks = tasks.filter((task) => task.status == false)
+  populateDOM()
+})
+
 let removedTasks = []
 
 function removeTask(removeID) {
@@ -232,7 +286,7 @@ deleteForm.addEventListener("formdata", (event) => {
 let removedCategories = []
 
 function deleteCategory(data) {
-  for (let i=0; i<categories.length; i++) {
+  for (let i in categories) {
     if (categories[i].name === data.deleteName) {
       removedCategories.push(categories[i])
       categories = categories.filter((category) => category.ID != categories[i].ID)
