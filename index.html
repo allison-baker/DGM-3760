@@ -22,57 +22,78 @@
     </header>
     <main>
       <div id="forms">
-        <section>
-          <form class="formStyling" id="newTask" method="POST">
-            <label for="taskName"
-              >Task Name <input type="text" name="taskName" id="taskName" placeholder="Task Name" value=""
-            /></label>
-            <label for="taskDescription"
-              >Task Description
-              <textarea name="taskDescription" id="taskDescription" placeholder="Task Description"></textarea>
-            </label>
+        <form class="formStyling" id="newTask" method="POST">
+          <label for="taskName"
+            >Task Name <input type="text" name="taskName" id="taskName" placeholder="Task Name" value=""
+          /></label>
+          <label for="taskDescription"
+            >Task Description
+            <textarea name="taskDescription" id="taskDescription" placeholder="Task Description"></textarea>
+          </label>
 
-            <fieldset class="smallSection">
-              <label for="taskCategory">Category<select name="taskCategory" id="taskCategory"></select></label>
-              <label for="taskDate">Due Date<input type="date" name="taskDate" id="taskDate" /></label>
-            </fieldset>
-            
-            <input type="submit" value="Create Task" id="createTask"/>
-          </form>
-        </section>
+          <fieldset class="smallSection">
+            <label for="taskCategory">Category<select name="taskCategory" id="taskCategory"></select></label>
+            <label for="taskDate">Due Date<input type="date" name="taskDate" id="taskDate" /></label>
+          </fieldset>
 
-        <div>
+          <input type="submit" value="Create Task" id="createTask" />
+        </form>
+
+        <div id="secondaryForms">
           <section>
             <form id="newCategory" class="formStyling" method="POST">
               <fieldset class="smallSection">
-                <label for="categoryName">Category Name <input type="text" name="categoryName" id="categoryName" placeholder="New Category Name" /></label>
-                <label for="categoryColor">Category Color <input type="color" name="categoryColor" id="categoryColor" value="#c24c8d" /></label>
+                <label for="categoryName"
+                  >Category Name
+                  <input type="text" name="categoryName" id="categoryName" placeholder="New Category Name"
+                /></label>
+                <label for="categoryColor"
+                  >Category Color <input type="color" name="categoryColor" id="categoryColor" value="#c24c8d"
+                /></label>
               </fieldset>
-              <input type="submit" value="Create Category" id="createCategory">
+              <input type="submit" value="Create Category" id="createCategory" />
             </form>
           </section>
-  
-          <section>
-            <form id="deleteCategory" class="formStyling" method="POST">
-              <label for="deleteName">Delete Category<select name="deleteName" id="deleteName"></select></label>
-              <input type="submit" value="Delete Category" id="deleteCatBtn">
-            </form>
-          </section>
+
+          <div>
+            <h3>Uncompleted Tasks Remaining:</h3>
+            <h3 id="tasksLeft"></h3>
+          </div>
+
+          <div>
+            <h3>Delete All Completed Tasks</h3>
+            <button id="clearTasks">Clear All</button>
+          </div>
         </div>
       </div>
 
-      <section id="listInfo">
-        <div>
-          <h3>Uncompleted Tasks Remaining:</h3>
-          <h3 id="tasksLeft"></h3>
-        </div>
-        <div>
-          <h3>Delete All Completed Tasks</h3>
-          <button id="clearTasks">Clear All</button>
-        </div>
-      </section>
+      <form id="filterCategory" class="formStyling" method="POST">
+        <select name="filterName" id="filterName"></select>
+        <input type="submit" value="Filter Tasks" id="filterCatBtn" />
+        <button id="showAll">Show All Tasks</button>
+      </form>
 
       <section id="gallery"></section>
+
+      <section id="bottomForms">
+        <form id="selectCategory" class="formStyling" method="POST">
+          <select name="selectName" id="selectName"></select>
+          <input type="submit" value="Select" id="selectCatBtn" />
+        </form>
+
+        <form id="editCategory" class="formStyling" method="POST">
+          <fieldset class="smallSection">
+            <label for="newName">Edit Name <input type="text" name="newName" id="newName" /></label>
+            <label for="categoryColor">Edit Color <input type="color" name="newColor" id="newColor" value="#c24c8d" /></label>
+          </fieldset>
+          <input type="submit" value="Edit Category" id="editCatBtn" />          
+        </form>
+
+        <form id="deleteCategory" class="formStyling" method="POST">
+          <label for="deleteName">Delete Category<select name="deleteName" id="deleteName"></select></label>
+          <input type="submit" value="Delete Category" id="deleteCatBtn" />
+        </form>
+      </section>
     </main>
     <footer>
       <p>&copy; 2023 &bull; Al Baker</p>
