@@ -185,6 +185,11 @@ let extraForms = document.querySelector("#extraForms");
 let toggleBtn = document.querySelector("#toggleForms");
 toggleBtn.addEventListener("click", () => {
   extraForms.classList.toggle("hidden");
+  if (extraForms.classList.contains("hidden")) {
+    toggleBtn.textContent = "More";
+  } else {
+    toggleBtn.textContent = "Less";
+  }
 });
 
 // DELETE A TODO
