@@ -4,247 +4,30 @@
   box-sizing: border-box;
 }
 
-:root {
-  --blue: #4158d0;
-  --pink: #c850c0;
-  --yellow: #ffcc70;
-  --darkPurple: #33032f;
-  --black: #170312;
+main div#todoDiv div section.noCategory button:first-child {
+  background-color: #222222;
 }
 
-body {
-  font-family: "Courier New", Courier, monospace;
-  font-size: 16px;
-  background-color: var(--blue);
-  background-image: linear-gradient(43deg, var(--blue) 0%, var(--pink) 46%, var(--yellow) 100%);
+main div#todoDiv div section.noCategory button:last-child {
+  background-color: #000000;
 }
 
-/* HEADER STYLING */
-header {
-  padding: 2rem 2%;
-}
-header h1 {
-  color: white;
-  padding: 0 0 0.5rem 0;
-  text-transform: uppercase;
-}
-header h2 {
-  color: white;
-  font-size: 1.3rem;
+main div#todoDiv div.complete {
+  border-color: #555555;
 }
 
-/* MAIN STYLING */
-main {
-  min-height: 80vh;
-  padding: 1rem 2%;
-}
-main div#forms {
-  display: grid;
-  grid-gap: 1.5rem;
-  grid-template-columns: 1fr 1fr;
-  margin-bottom: 1.5rem;
-}
-main section#gallery {
-  margin: 1.5rem 0;
-  display: grid;
-  grid-gap: 1.5rem;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: auto;
-}
-main .formStyling input[type=submit] {
-  background-color: var(--darkPurple);
-  color: white;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 5px;
-  margin-top: 0.75rem;
-  font-size: 1rem;
-  font-family: 'Courier New', Courier, monospace;
+main div#todoDiv div.complete p {
+  text-decoration: line-through;
 }
 
-/* TASK FORM STYLING */
-main .formStyling {
-  background-color: white;
-  border-radius: 10px;
-  padding: 1rem;
-}
-main .formStyling label {
-  display: block;
-  padding: 0.5rem 0;
-  font-weight: bold;
-  font-size: 0.9rem;
-}
-main .formStyling label input {
-  display: block;
-  padding: 0.5rem;
-  margin: 0.5rem 0 0 0;
-  border-radius: 5px;
-  border: none;
-  background-color: #eee;
-  color: var(--black);
-  font-family:'Courier New', Courier, monospace;
-  font-size: 1rem;
-  width: 100%;
-}
-main .formStyling select {
-  background-color: #eee;
-  font-family: 'Courier New', Courier, monospace;
-  color: var(--black);
-  padding: 0.5rem;
-  margin: 0.5rem 0 0 0;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  display: block;
-  width: 100%;
-}
-main div#forms form#newTask label textarea {
-  display: block;
-  border: none;
-  border-radius: 5px;
-  background-color: #eee;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 1rem;
-  color: var(--black);
-  padding: 0.5rem;
-  margin-top: 0.5rem;
-  width: 100%;
-}
-main fieldset.smallSection {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border: none;
-  grid-gap: 1rem;
+main div#todoDiv div.complete section {
+  grid-template-columns: 1fr;
 }
 
-/* SECONDARY FORMS STYLING */
-main div#secondaryForms {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-main div#secondaryForms form#newCategory input[type=color], main section#bottomForms form#editCategory input[type=color] {
-  padding: 0.25rem;
-  height: 2.15rem;
-}
-main div#secondaryForms div:first-child {
-  margin-bottom: 1.05rem;
-}
-main div#secondaryForms div {
-  background-color: white;
-  padding: 1rem;
-  border-radius: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-main div#secondaryForms div h3#tasksLeft {
-  background-color: var(--black);
-  padding: 0.5rem 0.75rem;
-  color: white;
-  border-radius: 50px;
-}
-main div#secondaryForms div button {
-  background-color: var(--darkPurple);
-  color: white;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-family: 'Courier New', Courier, monospace;
+main div#todoDiv div.complete section button:first-child {
+  display: none;
 }
 
-/* OTHER FORMS */
-main form#filterCategory, main form#selectCategory {
-  margin-top: 1.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-main form#filterCategory select, main form#selectCategory select {
-  margin: 0;
-  margin-right: 1rem;
-}
-main form#filterCategory input[type=submit], main form#selectCategory input[type=submit] {
-  margin: 0;
-  margin-right: 1rem;
-}
-main form#filterCategory button#showAll {
-  background-color: var(--darkPurple);
-  color: white;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-family: 'Courier New', Courier, monospace;
-  width: 12rem;
-}
-main section#bottomForms {
-  margin-top: 1.5rem;
-}
-main section#bottomForms form#selectCategory {
-  border-radius: 10px 10px 0 0;
-}
-main section#bottomForms form#editCategory {
-  border-radius: 0 0 10px 10px;
-  padding-top: 0;
-}
-main section#bottomForms form#deleteCategory {
-  margin-top: 1.5rem;
-}
-
-/* TO DO STYLING */
-main section#gallery article.taskBox {
-  background-color: white;
-  border-radius: 10px;
-  border-top: 10px solid #555555;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-main section#gallery article.taskBox div#textBox {
-  padding: 1rem;
-}
-main section#gallery article.taskBox div#textBox h2 {
-  color: var(--darkPurple);
-  margin-bottom: 0.5rem;
-}
-main section#gallery article.taskBox div#textBox h3 {
-  margin-top: 1rem;
-  border-top: 2px solid;
-  padding-top: 0.5rem;
-}
-main section#gallery article.taskBox div#textBox h4 {
-  margin-top: 0.25rem;
-  color: #555555;
-}
-main section#gallery article.taskBox div#buttonsBox {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 0.25rem;
-  margin-top: 0.25rem;
-}
-main section#gallery article.taskBox div#buttonsBox button {
-  padding: 0.5rem;
-  width: 100%;
-  border: none;
+main div#todoDiv div.complete section button:last-child {
   background-color: #555555;
-}
-main section#gallery article.taskBox div#buttonsBox button:first-child {
-  border-radius: 0 0 0 10px;
-}
-main section#gallery article.taskBox div#buttonsBox button:last-child {
-  border-radius: 0 0 10px 0;
-}
-
-/* FOOTER STYLING */
-footer {
-  padding: 1rem 2%;
-}
-footer p {
-  color: white;
-  text-align: center;
-  font-weight: bold;
-  font-size: 0.8rem;
 }

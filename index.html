@@ -8,96 +8,112 @@
     <meta name="author" content="Al Baker" />
 
     <!-- STYLE SHEETS -->
-    <link href="css/styles.css" rel="stylesheet" />
-    <script src="https://kit.fontawesome.com/369097350a.js" crossorigin="anonymous"></script>
+    <link href="css/practice.css" rel="stylesheet" />
+    <script
+      src="https://kit.fontawesome.com/369097350a.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- FAVICON STUFF -->
 
     <title>DGM 3760 To Do App</title>
   </head>
-  <body>
-    <header>
-      <h1>To Do App</h1>
-      <h2>Al Baker, DGM 3760</h2>
-    </header>
-    <main>
-      <div id="forms">
-        <form class="formStyling" id="newTask" method="POST">
-          <label for="taskName"
-            >Task Name <input type="text" name="taskName" id="taskName" placeholder="Task Name" value=""
-          /></label>
-          <label for="taskDescription"
-            >Task Description
-            <textarea name="taskDescription" id="taskDescription" placeholder="Task Description"></textarea>
-          </label>
+  <body class="bg-slate-800">
+    <main class="h-full py-[100px]">
+      <div class="w-1/2 p-4 bg-white rounded-md mx-auto">
+        <h1 class="text-4xl font-bold mb-6">Todo App</h1>
+        <div id="formDiv" class="my-4">
+          <input
+            type="text"
+            id="todoName"
+            placeholder="Todo Name"
+            value=""
+            class="bg-slate-100 p-2 rounded-md mr-2"
+          />
+          <select
+            id="todoCategory"
+            class="bg-slate-100 p-2 rounded-md mr-2"
+          ></select>
+          <button
+            id="createBtn"
+            class="btn bg-slate-800 p-2 rounded-md text-white"
+          >
+            Create Task
+          </button>
+        </div>
 
-          <fieldset class="smallSection">
-            <label for="taskCategory">Category<select name="taskCategory" id="taskCategory"></select></label>
-            <label for="taskDate">Due Date<input type="date" name="taskDate" id="taskDate" /></label>
-          </fieldset>
+        <div class="my-4">
+          <select
+            id="sortSelect"
+            class="bg-slate-100 p-2 rounded-md mr-2"
+          ></select>
+          <button
+            id="selectBtn"
+            class="btn bg-slate-800 p-2 rounded-md text-white"
+          >
+            Sort
+          </button>
+          <button
+            id="showAllBtn"
+            class="btn bg-slate-800 p-2 rounded-md text-white"
+          >
+            Show All
+          </button>
+          <p id="currentlyShowing" class="font-bold inline mx-2"></p>
+        </div>
 
-          <input type="submit" value="Create Task" id="createTask" />
-        </form>
+        <button
+          class="btn bg-slate-800 p-2 rounded-md text-white"
+          id="toggleForms"
+        >
+          More
+        </button>
 
-        <div id="secondaryForms">
-          <section>
-            <form id="newCategory" class="formStyling" method="POST">
-              <fieldset class="smallSection">
-                <label for="categoryName"
-                  >Category Name
-                  <input type="text" name="categoryName" id="categoryName" placeholder="New Category Name"
-                /></label>
-                <label for="categoryColor"
-                  >Category Color <input type="color" name="categoryColor" id="categoryColor" value="#c24c8d"
-                /></label>
-              </fieldset>
-              <input type="submit" value="Create Category" id="createCategory" />
-            </form>
-          </section>
-
-          <div>
-            <h3>Uncompleted Tasks Remaining:</h3>
-            <h3 id="tasksLeft"></h3>
+        <div id="extraForms">
+          <div class="my-4">
+            <select
+              id="deleteSelect"
+              class="bg-slate-100 p-2 rounded-md mr-2"
+            ></select>
+            <button
+              id="deleteBtn"
+              class="btn bg-slate-800 p-2 rounded-md text-white"
+            >
+              Delete
+            </button>
           </div>
-
-          <div>
-            <h3>Delete All Completed Tasks</h3>
-            <button id="clearTasks">Clear All</button>
+          <div class="my-4 flex flex-row items-center">
+            <input
+              type="text"
+              placeholder="New Name"
+              class="bg-slate-100 p-2 rounded-md mr-3"
+              id="newCatName"
+              value=""
+            />
+            <input
+              type="color"
+              value="#c24c8d"
+              id="newCatColor"
+              class="rounded-md p-1 bg-slate-100 h-10 mr-3"
+            />
+            <button
+              id="newCatBtn"
+              class="btn bg-slate-800 p-2 rounded-md text-white"
+            >
+              Create Category
+            </button>
           </div>
         </div>
+
+        <div id="todoDiv" class="my-4"></div>
       </div>
-
-      <form id="filterCategory" class="formStyling" method="POST">
-        <select name="filterName" id="filterName"></select>
-        <input type="submit" value="Filter Tasks" id="filterCatBtn" />
-        <button id="showAll">Show All Tasks</button>
-      </form>
-
-      <section id="gallery"></section>
-
-      <section id="bottomForms">
-        <form id="selectCategory" class="formStyling" method="POST">
-          <select name="selectName" id="selectName"></select>
-          <input type="submit" value="Select" id="selectCatBtn" />
-        </form>
-
-        <form id="editCategory" class="formStyling" method="POST">
-          <fieldset class="smallSection">
-            <label for="newName">Edit Name <input type="text" name="newName" id="newName" placeholder="Select a Category to Edit First"/></label>
-            <label for="categoryColor">Edit Color <input type="color" name="newColor" id="newColor" value="#c24c8d" /></label>
-          </fieldset>
-          <input type="submit" value="Edit Category" id="editCatBtn" />          
-        </form>
-
-        <form id="deleteCategory" class="formStyling" method="POST">
-          <label for="deleteName">Delete Category<select name="deleteName" id="deleteName"></select></label>
-          <input type="submit" value="Delete Category" id="deleteCatBtn" />
-        </form>
-      </section>
     </main>
-    <footer>
-      <p>&copy; 2023 &bull; Al Baker</p>
+    <footer class="w-full fixed bottom-0 py-4">
+      <p class="text-center text-slate-400 text-sm">
+        &copy; 2023 &bull; Al Baker &bull; Utah Valley University DGM 3760
+      </p>
     </footer>
-    <script src="js/scripts.js"></script>
+    <script src="js/practice.js"></script>
   </body>
 </html>
