@@ -1,16 +1,20 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-main div#todoDiv div section.noCategory button:first-child {
+/* main div#todoDiv div section.noCategory button:first-child {
   background-color: #222222;
 }
 
 main div#todoDiv div section.noCategory button:last-child {
   background-color: #000000;
-}
+} */
 
 main div#todoDiv div.complete {
   border-color: #555555;

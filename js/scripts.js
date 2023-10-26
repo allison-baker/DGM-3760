@@ -126,14 +126,18 @@ function populateDOM(todos, categories, sortCategory) {
     sortedTodos = todos.filter((todo) => todo.category.name === sortCategory);
 
   sortedTodos.forEach((todo) => {
-    const status = todo.status ? "complete" : "incomplete";
-    const categoryExists = todo.category.name === "None" ? "noCategory" : "";
+    const border = todo.status
+      ? "border-[#555555]"
+      : `border-[${todo.category.color}]`;
+    const strike = todo.status ? "line-through" : "";
+    const button1 = todo.category.name === "None" ? "bg-zinc-900" : "bg-emerald-600";
+    const button2 = todo.category.name === "None" ? "bg-black" : "bg-rose-600";
 
-    const li = `<div class="${status} border-l-8 border-[${todo.category.color}] my-2 bg-slate-100 rounded-md flex justify-between" data-todoID="${todo.id}" onclick="toggleStatus(event, ${todo.id})">
-                  <p class="p-3 cursor-pointer">${todo.title}</p>
-                  <section class="text-white rounded-md cursor-pointer grid gap-0 grid-cols-2 ${categoryExists}">
-                    <button class="bg-emerald-600 text-center m-0 p-3" onclick="editTodo(${todo.id})"><i class="fa fa-edit"></i></button>
-                    <button class="bg-rose-600 text-center m-0 p-3 rounded-r-md" onclick="deleteTodo(${todo.id})"><i class="fa fa-trash"></i></button>
+    const li = `<div class="${border} border-l-8 my-2 bg-slate-100 rounded-md flex justify-between" data-todoID="${todo.id}" onclick="toggleStatus(event, ${todo.id})">
+                  <p class="p-3 cursor-pointer ${strike}">${todo.title}</p>
+                  <section class="text-white rounded-md cursor-pointer grid gap-0 grid-cols-2">
+                    <button class="${button1} text-center m-0 p-3" onclick="editTodo(${todo.id})"><i class="fa fa-edit"></i></button>
+                    <button class="${button2} text-center m-0 p-3 rounded-r-md" onclick="deleteTodo(${todo.id})"><i class="fa fa-trash"></i></button>
                   </section>
                 </div>`;
 
@@ -273,8 +277,8 @@ newCatBtn.addEventListener("click", () => {
   categories.push({
     name: newName.value,
     color: newColor.value,
-    id: getID(categories)
-  })
+    id: getID(categories),
+  });
   newName.value = "";
   newColor.value = "#c24c8d";
 
