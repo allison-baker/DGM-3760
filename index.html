@@ -9,6 +9,7 @@
 
     <!-- STYLE SHEETS -->
     <link href="css/output.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
     <script
       src="https://kit.fontawesome.com/369097350a.js"
       crossorigin="anonymous"
@@ -21,8 +22,9 @@
   <body class="bg-slate-800">
     <main class="h-full py-[100px]">
       <div class="w-1/2 p-4 bg-white rounded-md mx-auto">
-        <h1 class="text-4xl font-bold mb-6">Todo App</h1>
-        <div id="formDiv" class="my-4">
+        <h1 class="text-4xl font-bold">Todo App</h1>
+
+        <section class="my-4">
           <input
             type="text"
             id="todoName"
@@ -40,9 +42,9 @@
           >
             Create Task
           </button>
-        </div>
+        </section>
 
-        <div class="my-4">
+        <section class="my-4">
           <select
             id="sortSelect"
             class="bg-slate-100 p-2 rounded-md mr-2"
@@ -60,7 +62,7 @@
             Show All
           </button>
           <p id="currentlyShowing" class="font-bold inline mx-2"></p>
-        </div>
+        </section>
 
         <button
           class="btn bg-slate-800 p-2 rounded-md text-white"
@@ -69,7 +71,7 @@
           More
         </button>
 
-        <div id="extraForms" class="hidden">
+        <section id="extraForms" class="hidden">
           <div class="my-4">
             <select
               id="deleteSelect"
@@ -103,9 +105,19 @@
               Create Category
             </button>
           </div>
-        </div>
+        </section>
 
-        <div id="todoDiv" class="my-4"></div>
+        <section class="flex justify-between items-center">
+          <p id="tasksLeft" class="my-4"></p>
+          <button
+            id="clearDone"
+            class="btn bg-slate-800 p-2 rounded-md text-white"
+          >
+            Clear Done
+          </button>
+        </section>
+
+        <section id="todoContainer" class="my-4"></section>
       </div>
     </main>
     <footer class="w-full py-4">

@@ -52,13 +52,14 @@ let currentCategory = "all";
 
 // SELECT ELEMENTS
 
-let container = document.querySelector("#todoDiv");
+let container = document.querySelector("#todoContainer");
 let textInput = document.querySelector("#todoName");
 let selectCategory = document.querySelector("#todoCategory");
 let createBtn = document.querySelector("#createBtn");
 let sortSelection = document.querySelector("#sortSelect");
 let current = document.querySelector("#currentlyShowing");
 let deleteSelection = document.querySelector("#deleteSelect");
+let tasksLeft = document.querySelector("#tasksLeft");
 
 /* Event listener for create button */
 createBtn.addEventListener("click", () => {
@@ -116,6 +117,15 @@ function addTodo(title, category) {
 
 // POPULATE THE DOM
 
+/* Count how many todos are incomplete */
+function getCount(array) {
+  let count = 0;
+  array.forEach((item) => {
+    if (item.status === false) count++;
+  });
+  return count;
+}
+
 /* Create a div for each todo that has all styling and the buttons within, and insert into the todo container */
 function populateDOM(todos, categories, sortCategory) {
   container.innerHTML = "";
@@ -126,18 +136,17 @@ function populateDOM(todos, categories, sortCategory) {
     sortedTodos = todos.filter((todo) => todo.category.name === sortCategory);
 
   sortedTodos.forEach((todo) => {
-    const border = todo.status
-      ? "border-[#555555]"
-      : `border-[${todo.category.color}]`;
-    const strike = todo.status ? "line-through" : "";
-    const button1 = todo.category.name === "None" ? "bg-zinc-900" : "bg-emerald-600";
-    const button2 = todo.category.name === "None" ? "bg-black" : "bg-rose-600";
+    const complete = todo.status ? "todoComplete" : "";
+    const categoryExists = todo.category.name === "None" ? "categoryExists" : "";
 
-    const li = `<div class="${border} border-l-8 my-2 bg-slate-100 rounded-md flex justify-between" data-todoID="${todo.id}" onclick="toggleStatus(event, ${todo.id})">
-                  <p class="p-3 cursor-pointer ${strike}">${todo.title}</p>
+    const li = `<div class="border-[${todo.category.color}] ${complete}  ${categoryExists} border-l-8 my-2 bg-slate-100 rounded-md flex justify-between" id="${todo.id}">
+                  <section>
+                    <p class="p-3 cursor-pointer">${todo.title}</p>
+                    <input type="text" value="" class="p-2 rounded-md m-2 hidden" />
+                  </section>
                   <section class="text-white rounded-md cursor-pointer grid gap-0 grid-cols-2">
-                    <button class="${button1} text-center m-0 p-3" onclick="editTodo(${todo.id})"><i class="fa fa-edit"></i></button>
-                    <button class="${button2} text-center m-0 p-3 rounded-r-md" onclick="deleteTodo(${todo.id})"><i class="fa fa-trash"></i></button>
+                    <button id="editBtn" class="bg-emerald-600 text-center m-0 p-3"><i class="fa fa-edit"></i></button>
+                    <button id="deleteBtn" class="bg-rose-600 text-center m-0 p-3 rounded-r-md"><i class="fa fa-trash"></i></button>
                   </section>
                 </div>`;
 
@@ -146,6 +155,11 @@ function populateDOM(todos, categories, sortCategory) {
 
   // Update the categories dropdown when the DOM updates
   populateDropdown(categories);
+
+  // Update the todos left to complete
+  tasksLeft.innerHTML = `Tasks left to complete: <span class="font-bold">${getCount(
+    sortedTodos
+  )}</span>`;
 
   // Update the currently showing text to reflect a change in filtering by category
   current.textContent = `Currently showing: ${sortCategory} todos.`;
@@ -169,16 +183,36 @@ function populateDropdown(categories) {
 /* Initial population of the DOM */
 populateDOM(todos, categories, currentCategory);
 
-// TOGGLE STATUS
+// CLICK HANDLER FOR THE ENTIRE TODO LIST - HANDLE EDIT, DELETE, AND TOGGLE
 
-function toggleStatus(event, clickedId) {
-  if (event.target.localName === "p" || event.target.localName === "div") {
-    todos.forEach((todo) => {
-      if (todo.id === clickedId) {
-        todo.status = !todo.status;
-      }
-    });
+container.addEventListener("click", (event) => {
+  let item = event.target;
+  let selectedTodo = Number(item.closest("div").id);
+
+  // Toggle todo status if clicked anything but a button
+  if (item.localName != "button" && item.localName != "i") {
+    toggleStatus(selectedTodo);
+    return
   }
+
+  // Determine if a button or the icon within was clicked
+  let buttonType;
+  if (item.localName === "button") buttonType = item;
+  else if (item.localName === "i") buttonType = item.closest("button");
+
+  // Determine which button was clicked and run appropriate function
+  if (buttonType.id === "editBtn") editTodo(selectedTodo);
+  else if (buttonType.id === "deleteBtn") deleteTodo(selectedTodo);
+});
+
+// TOGGLE TODO STATUS
+
+function toggleStatus(clickedId) {
+  todos.forEach((todo) => {
+    if (todo.id === clickedId) {
+      todo.status = !todo.status;
+    }
+  });
 
   populateDOM(todos, categories, currentCategory);
 }
@@ -202,20 +236,13 @@ let removedTodos = [];
 
 /* Push to the removed todos array and remove from the current todos array */
 function deleteTodo(removeID) {
-  todos.forEach((todo) => {
-    if (todo.id === removeID) {
-      removedTodos.push(todo);
-      todos = todos.filter((todo) => todo.id != removeID);
-      populateDOM(todos, categories, currentCategory);
-      return;
-    }
-  });
+  console.log("delete clicked");
 }
 
 // EDIT A TODO
 
 function editTodo(editID) {
-  console.log("edit");
+  console.log("edit clicked");
 }
 
 // SORT BY CATEGORY
