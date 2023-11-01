@@ -9,33 +9,33 @@
 }
 
 div.todoComplete {
-  border-color: #020617;
+  border-color: #cbd5e1 !important;
 }
 
 div.todoComplete section p {
   text-decoration: line-through;
 }
 
-div.todoComplete section:last-child button:first-child {
-  background-color: #1e293b;
-}
-
-div.todoComplete section:last-child button:last-child {
-  background-color: #020617;
-}
-
-div.categoryExists {
-  border-color: #cbd5e1 !important;
-}
-
-div.categoryExists section:last-child {
+div.todoComplete section:last-child {
   color: black;
 }
 
-div.categoryExists section:last-child button:first-child {
+div.todoComplete section:last-child button:first-child {
   background-color: #e2e8f0 !important;
 }
 
-div.categoryExists section:last-child button:last-child {
+div.todoComplete section:last-child button:last-child {
   background-color: #cbd5e1 !important;
+}
+
+div.categoryExists {
+  border-color: #020617;
+}
+
+div.categoryExists section:last-child button:first-child {
+  background-color: #065f46;
+}
+
+div.categoryExists section:last-child button:last-child {
+  background-color: #9f1239;
 }

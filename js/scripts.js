@@ -139,7 +139,7 @@ function populateDOM(todos, categories, sortCategory) {
     const complete = todo.status ? "todoComplete" : "";
     const categoryExists = todo.category.name === "None" ? "categoryExists" : "";
 
-    const li = `<div class="border-[${todo.category.color}] ${complete}  ${categoryExists} border-l-8 my-2 bg-slate-100 rounded-md flex justify-between" id="${todo.id}">
+    const li = `<div class="border-[${todo.category.color}] ${complete}  ${categoryExists} border-l-8 my-2 bg-slate-100 rounded-md flex justify-between" data-todoid="${todo.id}">
                   <section>
                     <p class="p-3 cursor-pointer">${todo.title}</p>
                     <input type="text" value="" class="p-2 rounded-md m-2 hidden" />
@@ -187,7 +187,8 @@ populateDOM(todos, categories, currentCategory);
 
 container.addEventListener("click", (event) => {
   let item = event.target;
-  let selectedTodo = Number(item.closest("div").id);
+  let selectedTodo = Number(item.closest("div").dataset.todoid);
+  console.log(selectedTodo);
 
   // Toggle todo status if clicked anything but a button
   if (item.localName != "button" && item.localName != "i") {
