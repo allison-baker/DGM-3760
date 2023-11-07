@@ -1,65 +1,85 @@
-let categories = [
-  {
-    name: "Personal",
-    color: "#7236AB",
-    id: 0,
-  },
-  {
-    name: "Homework",
-    color: "#C75050",
-    id: 1,
-  },
-  {
-    name: "Work",
-    color: "#50B3C7",
-    id: 2,
-  },
-  {
-    name: "Chores",
-    color: "#97C750",
-    id: 3,
-  },
-];
-
-let todos = [
-  {
-    id: 0,
-    title: "Meal Prep",
-    category: categories[0],
-    status: false,
-  },
-  {
-    id: 1,
-    title: "Finish Onboarding",
-    category: categories[2],
-    status: false,
-  },
-  {
-    id: 2,
-    title: "Todo App API",
-    category: categories[1],
-    status: false,
-  },
-  {
-    id: 3,
-    title: "Fix Sink Disposal",
-    category: categories[3],
-    status: false,
-  },
-];
-
 let currentCategory = "all";
+let todos = [];
+let categories = [];
 
-// SELECT ELEMENTS
+async function getData() {
+  todos = fetch("/api/todos")
+    .then(res => res.json())
+    .then(d => console.log(d));
+
+  categories = fetch("/api/categories")
+    .then(res => res.json())
+    .then(d => console.log(d));
+}
 
 let container = document.querySelector("#todoContainer");
-let textInput = document.querySelector("#todoName");
-let selectCategory = document.querySelector("#todoCategory");
-let createBtn = document.querySelector("#createBtn");
-let sortSelection = document.querySelector("#sortSelect");
 let current = document.querySelector("#currentlyShowing");
-let deleteSelection = document.querySelector("#deleteSelect");
 let tasksLeft = document.querySelector("#tasksLeft");
+
+/* Create a div for each todo that has all styling and the buttons within, and insert into the todo container */
+async function populateDOM(todos, categories, sortCategory) {
+  await getData();
+  container.innerHTML = "";
+
+  let sortedTodos = [];
+  if (currentCategory === "all") sortedTodos = todos;
+  else
+    sortedTodos = todos.filter((todo) => todo.category.name === sortCategory);
+
+  sortedTodos.forEach((todo) => {
+    const complete = todo.status ? "todoComplete" : "";
+    const categoryExists =
+      todo.category.name === "None" ? "categoryExists" : "";
+
+    const li = `<div class="border-[${todo.category.color}] ${complete}  ${categoryExists} border-l-8 my-2 bg-slate-100 rounded-md flex justify-between" data-todoid="${todo.id}">
+                  <section>
+                    <p class="p-3 cursor-pointer">${todo.title}</p>
+                    <input type="text" value="" class="p-2 rounded-md m-2 hidden" />
+                  </section>
+                  <section class="text-white rounded-md cursor-pointer grid gap-0 grid-cols-2">
+                    <button id="editBtn" class="bg-emerald-600 text-center m-0 p-3"><i class="fa fa-edit"></i></button>
+                    <button id="deleteBtn" class="bg-rose-600 text-center m-0 p-3 rounded-r-md"><i class="fa fa-trash"></i></button>
+                  </section>
+                </div>`;
+
+    container.insertAdjacentHTML("beforeend", li);
+  });
+
+  // Update the categories dropdown when the DOM updates
+  populateDropdown(categories);
+
+  // Update the todos left to complete
+  tasksLeft.innerHTML = `Tasks left to complete: <span class="font-bold">${getCount(sortedTodos)}</span>`;
+
+  // Update the currently showing text to reflect a change in filtering by category
+  current.textContent = `Currently showing: ${sortCategory} todos.`;
+}
+
+let selectCategory = document.querySelector("#todoCategory");
+let sortSelection = document.querySelector("#sortSelect");
+let deleteSelection = document.querySelector("#deleteSelect");
+
+/* Dynamically populate the category dropdowns so if the user adds/deletes categories it updates */
+function populateDropdown(categories) {
+  selectCategory.innerHTML = "<option value=''>--Select Category--</option>";
+  sortSelection.innerHTML =
+    "<option value='all'>--Filter by Category--</option>";
+  deleteSelection.innerHTML = "<option value=''>--Delete a Category--</option";
+
+  categories.forEach((category) => {
+    let option = `<option value="${category.name}">${category.name}</option>`;
+    selectCategory.insertAdjacentHTML("beforeend", option);
+    sortSelection.insertAdjacentHTML("beforeend", option);
+    deleteSelection.insertAdjacentHTML("beforeend", option);
+  });
+}
+
+/* Initial population of the DOM */
+populateDOM(todos, categories, currentCategory);
+
+// SELECT ELEMENTS
+let textInput = document.querySelector("#todoName");
+let createBtn = document.querySelector("#createBtn");
 
 /* Event listener for create button */
 createBtn.addEventListener("click", () => {
@@ -106,13 +126,19 @@ function matchCategory(name) {
 }
 
 /* Add new todo object to the array */
-function addTodo(title, category) {
-  todos.push({
-    id: getID(todos),
-    title,
-    category: matchCategory(category),
-    status: false,
-  });
+async function addTodo(title, category) {
+  todos = fetch("/api/todo", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    },
+    body: JSON.stringify({
+      title,
+      category
+  })
+  })
+  .then((res) => res.json())
+  .then((data) => console.log(data))
 }
 
 // POPULATE THE DOM
@@ -126,63 +152,6 @@ function getCount(array) {
   return count;
 }
 
-/* Create a div for each todo that has all styling and the buttons within, and insert into the todo container */
-function populateDOM(todos, categories, sortCategory) {
-  container.innerHTML = "";
-
-  let sortedTodos = [];
-  if (currentCategory === "all") sortedTodos = todos;
-  else
-    sortedTodos = todos.filter((todo) => todo.category.name === sortCategory);
-
-  sortedTodos.forEach((todo) => {
-    const complete = todo.status ? "todoComplete" : "";
-    const categoryExists = todo.category.name === "None" ? "categoryExists" : "";
-
-    const li = `<div class="border-[${todo.category.color}] ${complete}  ${categoryExists} border-l-8 my-2 bg-slate-100 rounded-md flex justify-between" data-todoid="${todo.id}">
-                  <section>
-                    <p class="p-3 cursor-pointer">${todo.title}</p>
-                    <input type="text" value="" class="p-2 rounded-md m-2 hidden" />
-                  </section>
-                  <section class="text-white rounded-md cursor-pointer grid gap-0 grid-cols-2">
-                    <button id="editBtn" class="bg-emerald-600 text-center m-0 p-3"><i class="fa fa-edit"></i></button>
-                    <button id="deleteBtn" class="bg-rose-600 text-center m-0 p-3 rounded-r-md"><i class="fa fa-trash"></i></button>
-                  </section>
-                </div>`;
-
-    container.insertAdjacentHTML("beforeend", li);
-  });
-
-  // Update the categories dropdown when the DOM updates
-  populateDropdown(categories);
-
-  // Update the todos left to complete
-  tasksLeft.innerHTML = `Tasks left to complete: <span class="font-bold">${getCount(
-    sortedTodos
-  )}</span>`;
-
-  // Update the currently showing text to reflect a change in filtering by category
-  current.textContent = `Currently showing: ${sortCategory} todos.`;
-}
-
-/* Dynamically populate the category dropdowns so if the user adds/deletes categories it updates */
-function populateDropdown(categories) {
-  selectCategory.innerHTML = "<option value=''>--Select Category--</option>";
-  sortSelection.innerHTML =
-    "<option value='all'>--Filter by Category--</option>";
-  deleteSelection.innerHTML = "<option value=''>--Delete a Category--</option";
-
-  categories.forEach((category) => {
-    let option = `<option value="${category.name}">${category.name}</option>`;
-    selectCategory.insertAdjacentHTML("beforeend", option);
-    sortSelection.insertAdjacentHTML("beforeend", option);
-    deleteSelection.insertAdjacentHTML("beforeend", option);
-  });
-}
-
-/* Initial population of the DOM */
-populateDOM(todos, categories, currentCategory);
-
 // CLICK HANDLER FOR THE ENTIRE TODO LIST - HANDLE EDIT, DELETE, AND TOGGLE
 
 container.addEventListener("click", (event) => {
@@ -193,7 +162,7 @@ container.addEventListener("click", (event) => {
   // Toggle todo status if clicked anything but a button
   if (item.localName != "button" && item.localName != "i") {
     toggleStatus(selectedTodo);
-    return
+    return;
   }
 
   // Determine if a button or the icon within was clicked
@@ -234,10 +203,12 @@ toggleBtn.addEventListener("click", () => {
 // DELETE A TODO
 
 let removedTodos = [];
+let clearAll = document.querySelector("#clearDone");
 
 /* Push to the removed todos array and remove from the current todos array */
 function deleteTodo(removeID) {
   console.log("delete clicked");
+  let url = "https://localhost:3000/api/todo";
 }
 
 // EDIT A TODO

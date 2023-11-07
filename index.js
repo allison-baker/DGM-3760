@@ -6,6 +6,8 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(express.static('client'));
+
 let categories = [
   {
     name: "Personal",
@@ -98,7 +100,7 @@ app.post("/api/todo", (req, res) => {
     status: false,
   }); 
 
-  res.send("Posted a todo");
+  res.send(todos);
 });
 
 // PUT (UPDATE) TODOS
@@ -110,14 +112,14 @@ app.put("/api/todo", (req, res) => {
     }
   })
 
-  res.send("Updated a todo");
+  res.send(todos);
 })
 
 // DELETE TODO
 app.delete("/api/todo", (req, res) => {
   todos.filter(todo => todo.id != req.body.id);
 
-  res.send("Deleted a todo");
+  res.send(todos);
 })
 
 // PUT (UPDATE) TODO STATUS
@@ -126,7 +128,7 @@ app.put("/api/todo/status", (req, res) => {
     if (todo.id === req.body.id) todo.status != todo.status;
   })
 
-  res.send("Toggled a todo status");
+  res.send(todos);
 })
 
 // GET ALL TODOS for a CATEGORY
@@ -147,7 +149,7 @@ app.put("/api/todos/category", (req, res) => {
     todo.category = matchCategory(todo.category.name);
   })
 
-  res.send("All categories for existing todos have been checked");
+  res.send(todos);
 })
 
 // GET CATEGORIES
@@ -163,7 +165,7 @@ app.post("/api/category", (req, res) => {
     color: req.body.color,
   })
 
-  res.send("Posted a category");
+  res.send(categories);
 })
 
 // PUT (UPDATE) CATEGORIES
@@ -175,14 +177,14 @@ app.put("/api/category", (req, res) => {
     }
   })
 
-  res.send("Updated a category");
+  res.send(categories);
 })
 
 // DELETE CATEGORIES
 app.delete("/api/category", (req, res) => {
   categories.filter(category => category.id != req.body.id);
 
-  res.send("Deleted a category");
+  res.send(categories);
 })
 
 // LISTEN
