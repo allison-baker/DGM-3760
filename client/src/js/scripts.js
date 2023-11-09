@@ -1,24 +1,41 @@
 let currentCategory = "all";
-let todos = [];
-let categories = [];
 
+/* Get todos and categories from back end and populate DOM */
 async function getData() {
-  todos = fetch("/api/todos")
-    .then(res => res.json())
-    .then(d => console.log(d));
+  let todosPromise = fetch("/api/todos");
+  let categoriesPromise = fetch("/api/categories");
 
-  categories = fetch("/api/categories")
-    .then(res => res.json())
-    .then(d => console.log(d));
+  Promise.all([todosPromise, categoriesPromise])
+    .then((respsArray) => {
+      return Promise.all(respsArray.map((data) => data.json()));
+    })
+    .then(([todos, cats]) => {
+      populateDOM(todos, currentCategory);
+      populateDropdown(cats);
+    });
 }
 
+// POPULATE THE DOM
+
+/* Itinital function call */
+getData();
+
+/* Select important elements */
 let container = document.querySelector("#todoContainer");
 let current = document.querySelector("#currentlyShowing");
 let tasksLeft = document.querySelector("#tasksLeft");
 
+/* Count how many todos are incomplete */
+function getCount(array) {
+  let count = 0;
+  array.forEach((item) => {
+    if (item.status === false) count++;
+  });
+  return count;
+}
+
 /* Create a div for each todo that has all styling and the buttons within, and insert into the todo container */
-async function populateDOM(todos, categories, sortCategory) {
-  await getData();
+function populateDOM(todos, sortCategory) {
   container.innerHTML = "";
 
   let sortedTodos = [];
@@ -45,11 +62,10 @@ async function populateDOM(todos, categories, sortCategory) {
     container.insertAdjacentHTML("beforeend", li);
   });
 
-  // Update the categories dropdown when the DOM updates
-  populateDropdown(categories);
-
   // Update the todos left to complete
-  tasksLeft.innerHTML = `Tasks left to complete: <span class="font-bold">${getCount(sortedTodos)}</span>`;
+  tasksLeft.innerHTML = `Tasks left to complete: <span class="font-bold">${getCount(
+    sortedTodos
+  )}</span>`;
 
   // Update the currently showing text to reflect a change in filtering by category
   current.textContent = `Currently showing: ${sortCategory} todos.`;
@@ -74,9 +90,6 @@ function populateDropdown(categories) {
   });
 }
 
-/* Initial population of the DOM */
-populateDOM(todos, categories, currentCategory);
-
 // SELECT ELEMENTS
 let textInput = document.querySelector("#todoName");
 let createBtn = document.querySelector("#createBtn");
@@ -84,14 +97,14 @@ let createBtn = document.querySelector("#createBtn");
 /* Event listener for create button */
 createBtn.addEventListener("click", () => {
   addTodo(textInput.value, selectCategory.value);
-  populateDOM(todos, categories, currentCategory);
+  getData();
 });
 
 /* Event listener for enter key in input field */
 textInput.addEventListener("keyup", (event) => {
   if (event.keyCode === 13) {
     addTodo(textInput.value, selectCategory.value);
-    populateDOM(todos, categories, currentCategory);
+    getData();
   }
 });
 
@@ -127,29 +140,18 @@ function matchCategory(name) {
 
 /* Add new todo object to the array */
 async function addTodo(title, category) {
-  todos = fetch("/api/todo", {
+  fetch("/api/todo", {
     method: "POST",
     headers: {
-      'Content-Type': 'application/json;charset=utf-8'
+      "Content-Type": "application/json;charset=utf-8",
     },
     body: JSON.stringify({
       title,
-      category
+      category,
+    }),
   })
-  })
-  .then((res) => res.json())
-  .then((data) => console.log(data))
-}
-
-// POPULATE THE DOM
-
-/* Count how many todos are incomplete */
-function getCount(array) {
-  let count = 0;
-  array.forEach((item) => {
-    if (item.status === false) count++;
-  });
-  return count;
+    .then((res) => res.json())
+    .then(getData());
 }
 
 // CLICK HANDLER FOR THE ENTIRE TODO LIST - HANDLE EDIT, DELETE, AND TOGGLE
@@ -183,14 +185,15 @@ function toggleStatus(clickedId) {
       todo.status = !todo.status;
     }
   });
-
-  populateDOM(todos, categories, currentCategory);
+  getData();
 }
 
 // TOGGLE EXTRA FORMS
 
 let extraForms = document.querySelector("#extraForms");
 let toggleBtn = document.querySelector("#toggleForms");
+
+/* Change text content on button depending on if the content is shown or not */
 toggleBtn.addEventListener("click", () => {
   extraForms.classList.toggle("hidden");
   if (extraForms.classList.contains("hidden")) {
@@ -202,13 +205,12 @@ toggleBtn.addEventListener("click", () => {
 
 // DELETE A TODO
 
-let removedTodos = [];
 let clearAll = document.querySelector("#clearDone");
 
 /* Push to the removed todos array and remove from the current todos array */
 function deleteTodo(removeID) {
   console.log("delete clicked");
-  let url = "https://localhost:3000/api/todo";
+  let url = "/api/todo";
 }
 
 // EDIT A TODO
@@ -225,13 +227,13 @@ let showAllBtn = document.querySelector("#showAllBtn");
 /* Event listener for the sort button to change the current selected category and repopulate the DOM */
 sortBtn.addEventListener("click", () => {
   currentCategory = sortSelection.value;
-  populateDOM(todos, categories, currentCategory);
+  getData();
 });
 
 /* Event listener for the show all button to change the current selected category to all and repopulate the DOM */
 showAllBtn.addEventListener("click", () => {
   currentCategory = "all";
-  populateDOM(todos, categories, currentCategory);
+  getData();
 });
 
 // DELETE A CATEGORY
