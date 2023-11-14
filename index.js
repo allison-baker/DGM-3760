@@ -11,22 +11,38 @@ app.use(express.static('client'));
 let categories = [
   {
     name: "Personal",
-    color: "#7236AB",
+    color: {
+      name: 'Purple',
+      class: 'border-purple-900',
+      id: 8
+    },
     id: 0,
   },
   {
     name: "Homework",
-    color: "#C75050",
+    color: {
+      name: 'Red',
+      class: 'border-red-800',
+      id: 0
+    },
     id: 1,
   },
   {
     name: "Work",
-    color: "#50B3C7",
+    color: {
+      name: 'Sky',
+      class: 'border-sky-400',
+      id: 5
+    },
     id: 2,
   },
   {
     name: "Chores",
-    color: "#97C750",
+    color: {
+      name: 'Lime',
+      class: 'border-lime-500',
+      id: 3
+    },
     id: 3,
   },
 ];
@@ -103,7 +119,7 @@ app.post("/api/todo", (req, res) => {
   res.send(todos);
 });
 
-// PUT (UPDATE) TODOS
+// FIXME: PUT (UPDATE) TODOS
 app.put("/api/todo", (req, res) => {
   todos.forEach(todo => {
     if (todo.id === req.body.id) {
@@ -115,14 +131,14 @@ app.put("/api/todo", (req, res) => {
   res.send(todos);
 })
 
-// DELETE TODO
+// FIXME: DELETE TODO
 app.delete("/api/todo", (req, res) => {
   todos.filter(todo => todo.id != req.body.id);
 
   res.send(todos);
 })
 
-// PUT (UPDATE) TODO STATUS
+// FIXME: PUT (UPDATE) TODO STATUS
 app.put("/api/todo/status", (req, res) => {
   todos.forEach(todo => {
     if (todo.id === req.body.id) todo.status != todo.status;
@@ -131,7 +147,7 @@ app.put("/api/todo/status", (req, res) => {
   res.send(todos);
 })
 
-// UPDATE ALL CATEGORIES for each TODO
+// FIXME: UPDATE ALL CATEGORIES for each TODO
 app.put("/api/todos/category", (req, res) => {
   todos.forEach(todo => {
     todo.category = matchCategory(todo.category.name);
@@ -156,7 +172,7 @@ app.post("/api/category", (req, res) => {
   res.send(categories);
 })
 
-// PUT (UPDATE) CATEGORIES
+// FIXME: PUT (UPDATE) CATEGORIES
 app.put("/api/category", (req, res) => {
   categories.forEach(category => {
     if (category.id === req.body.id) {
@@ -168,7 +184,7 @@ app.put("/api/category", (req, res) => {
   res.send(categories);
 })
 
-// DELETE CATEGORIES
+// FIXME: DELETE CATEGORIES
 app.delete("/api/category", (req, res) => {
   categories.filter(category => category.id != req.body.id);
 

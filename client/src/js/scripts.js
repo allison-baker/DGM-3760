@@ -1,5 +1,68 @@
 let currentCategory = "all";
 
+let colors = [
+  {
+    name: 'Red',
+    class: 'border-red-800',
+    id: 0
+  },
+  {
+    name: 'Amber',
+    class: 'border-amber-600',
+    id: 1
+  },
+  {
+    name: 'Yellow',
+    class: 'border-yellow-400',
+    id: 2
+  },
+  {
+    name: 'Lime',
+    class: 'border-lime-500',
+    id: 3
+  },
+  {
+    name: 'Green',
+    class: 'border-green-900',
+    id: 4
+  },
+  {
+    name: 'Sky',
+    class: 'border-sky-400',
+    id: 5
+  },
+  {
+    name: 'Blue',
+    class: 'border-blue-800',
+    id: 6
+  },
+  {
+    name: 'Violet',
+    class: 'border-violet-400',
+    id: 7
+  },
+  {
+    name: 'Purple',
+    class: 'border-purple-900',
+    id: 8
+  },
+  {
+    name: 'Fuschia',
+    class: 'border-fuschia-400',
+    id: 9
+  },
+  {
+    name: 'Pink',
+    class: 'border-pink-500',
+    id: 10
+  },
+  {
+    name: 'Brown',
+    class: 'border-amber-950',
+    id: 11
+  },
+]
+
 /* Get todos and categories from back end and populate DOM */
 async function getData() {
   let todosPromise = fetch("/api/todos");
@@ -44,11 +107,11 @@ function populateDOM(todos, sortCategory) {
     sortedTodos = todos.filter((todo) => todo.category.id === Number(sortCategory));
 
   sortedTodos.forEach((todo) => {
-    const complete = todo.status ? "todoComplete" : "";
+    const complete = todo.status ? " todoComplete" : "";
     const categoryExists =
-      todo.category.name === "None" ? "categoryExists" : "";
+      todo.category.name === "None" ? " categoryExists" : "";
 
-    const li = `<div class="border-[${todo.category.color}] ${complete}  ${categoryExists} border-l-8 my-2 bg-slate-100 rounded-md flex justify-between" data-todoid="${todo.id}">
+    const li = `<div class="border-l-8 ${todo.category.color.class}${complete}${categoryExists} my-2 bg-slate-100 rounded-md flex justify-between" data-todoid="${todo.id}">
                   <section>
                     <p class="p-3 cursor-pointer">${todo.title}</p>
                     <input type="text" value="" class="p-2 rounded-md m-2 hidden" />
@@ -89,6 +152,19 @@ function populateDropdown(categories) {
     deleteSelection.insertAdjacentHTML("beforeend", option);
   });
 }
+
+let colorDropdown = document.querySelector("#colorDropdown");
+
+/* Populate color dropdown for creating a new category */
+function populateColors() {
+  colorDropdown.innerHTML = '<option value="">--Select Color--</option>'
+  colors.forEach(color => {
+    let option = `<option value="${color.id}">${color.name}</option>`;
+    colorDropdown.insertAdjacentHTML('beforeend', option);
+  })
+}
+
+populateColors();
 
 // SELECT ELEMENTS
 let textInput = document.querySelector("#todoName");
@@ -176,9 +252,8 @@ container.addEventListener("click", (event) => {
   else if (buttonType.id === "deleteBtn") deleteTodo(selectedTodo);
 });
 
-// TOGGLE TODO STATUS
+// TODO: TOGGLE TODO STATUS
 
-// TODO: Toggle status
 function toggleStatus(clickedId) {
   console.log("toggle me");
 }
@@ -198,19 +273,17 @@ toggleBtn.addEventListener("click", () => {
   }
 });
 
-// DELETE A TODO
+// TODO: DELETE A TODO
 
 let clearAll = document.querySelector("#clearDone");
 
-// TODO: Delete todo
 /* Push to the removed todos array and remove from the current todos array */
 function deleteTodo(removeID) {
   console.log("delete clicked");
 }
 
-// EDIT A TODO
+// TODO: EDIT A TODO
 
-// TODO: Edit todo
 function editTodo(editID) {
   console.log("edit clicked");
 }
@@ -232,11 +305,10 @@ showAllBtn.addEventListener("click", () => {
   getData();
 });
 
-// DELETE A CATEGORY
+// TODO: DELETE A CATEGORY
 
 let deleteCategory = document.querySelector("#deleteBtn");
 
-// TODO: Delete category
 /* Push deleted category to removed categories array, remove from original categories array */
 deleteCategory.addEventListener("click", () => {
   console.log("delete category");
@@ -245,10 +317,8 @@ deleteCategory.addEventListener("click", () => {
 // CREATE A NEW CATEGORY
 
 let newName = document.querySelector("#newCatName");
-let newColor = document.querySelector("#newCatColor");
 let newCatBtn = document.querySelector("#newCatBtn");
 
-// TODO: Create category
 newCatBtn.addEventListener("click", () => {
   fetch("/api/category", {
     method: "POST",
@@ -257,9 +327,12 @@ newCatBtn.addEventListener("click", () => {
     },
     body: JSON.stringify({
       name: newName.value,
-      color: newColor.value,
+      color: colors[Number(colorDropdown.value)],
     }),
   })
     .then((res) => res.json())
     .then(getData());
+
+  newName.value = '';
+  colorDropdown.value = '';
 });
