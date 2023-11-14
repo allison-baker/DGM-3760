@@ -41,7 +41,7 @@ function populateDOM(todos, sortCategory) {
   let sortedTodos = [];
   if (currentCategory === "all") sortedTodos = todos;
   else
-    sortedTodos = todos.filter((todo) => todo.category.name === sortCategory);
+    sortedTodos = todos.filter((todo) => todo.category.id === Number(sortCategory));
 
   sortedTodos.forEach((todo) => {
     const complete = todo.status ? "todoComplete" : "";
@@ -83,7 +83,7 @@ function populateDropdown(categories) {
   deleteSelection.innerHTML = "<option value=''>--Delete a Category--</option";
 
   categories.forEach((category) => {
-    let option = `<option value="${category.name}">${category.name}</option>`;
+    let option = `<option value="${category.id}">${category.name}</option>`;
     selectCategory.insertAdjacentHTML("beforeend", option);
     sortSelection.insertAdjacentHTML("beforeend", option);
     deleteSelection.insertAdjacentHTML("beforeend", option);
@@ -121,10 +121,10 @@ function getID(array) {
 }
 
 /* Find a matching category in the categories array or return category none */
-function matchCategory(name) {
+function matchCategory(id) {
   let match;
   categories.forEach((category) => {
-    if (name === category.name) {
+    if (id === category.id) {
       match = category;
     }
   });
@@ -159,7 +159,6 @@ async function addTodo(title, category) {
 container.addEventListener("click", (event) => {
   let item = event.target;
   let selectedTodo = Number(item.closest("div").dataset.todoid);
-  console.log(selectedTodo);
 
   // Toggle todo status if clicked anything but a button
   if (item.localName != "button" && item.localName != "i") {
@@ -179,13 +178,9 @@ container.addEventListener("click", (event) => {
 
 // TOGGLE TODO STATUS
 
+// TODO: Toggle status
 function toggleStatus(clickedId) {
-  todos.forEach((todo) => {
-    if (todo.id === clickedId) {
-      todo.status = !todo.status;
-    }
-  });
-  getData();
+  console.log("toggle me");
 }
 
 // TOGGLE EXTRA FORMS
@@ -207,14 +202,15 @@ toggleBtn.addEventListener("click", () => {
 
 let clearAll = document.querySelector("#clearDone");
 
+// TODO: Delete todo
 /* Push to the removed todos array and remove from the current todos array */
 function deleteTodo(removeID) {
   console.log("delete clicked");
-  let url = "/api/todo";
 }
 
 // EDIT A TODO
 
+// TODO: Edit todo
 function editTodo(editID) {
   console.log("edit clicked");
 }
@@ -238,35 +234,13 @@ showAllBtn.addEventListener("click", () => {
 
 // DELETE A CATEGORY
 
-let removedCategories = [];
 let deleteCategory = document.querySelector("#deleteBtn");
 
+// TODO: Delete category
 /* Push deleted category to removed categories array, remove from original categories array */
 deleteCategory.addEventListener("click", () => {
-  categories.forEach((category) => {
-    if (category.name === deleteSelection.value) {
-      removedCategories.push(category);
-      removeCategory();
-      return;
-    }
-  });
+  console.log("delete category");
 });
-
-/* Separate function to filter the categories array and then reassign the todo categories */
-function removeCategory() {
-  categories = categories.filter(
-    (category) => category.name != deleteSelection.value
-  );
-  reassignTodos(todos);
-  populateDOM(todos, categories, currentCategory);
-}
-
-/* Check all the categories of the todos and reassign if the category doesn't exist anymore */
-function reassignTodos() {
-  todos.forEach((todo) => {
-    todo.category = matchCategory(todo.category.name);
-  });
-}
 
 // CREATE A NEW CATEGORY
 
@@ -274,14 +248,18 @@ let newName = document.querySelector("#newCatName");
 let newColor = document.querySelector("#newCatColor");
 let newCatBtn = document.querySelector("#newCatBtn");
 
+// TODO: Create category
 newCatBtn.addEventListener("click", () => {
-  categories.push({
-    name: newName.value,
-    color: newColor.value,
-    id: getID(categories),
-  });
-  newName.value = "";
-  newColor.value = "#c24c8d";
-
-  populateDropdown(categories);
+  fetch("/api/category", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({
+      name: newName.value,
+      color: newColor.value,
+    }),
+  })
+    .then((res) => res.json())
+    .then(getData());
 });

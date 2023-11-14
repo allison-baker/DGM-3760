@@ -69,10 +69,10 @@ function getID(array) {
 }
 
 /* Find a matching category in the categories array or return category none */
-function matchCategory(name) {
+function matchCategory(id) {
   let match;
   categories.forEach((category) => {
-    if (name === category.name) {
+    if (id === category.id) {
       match = category;
     }
   });
@@ -96,7 +96,7 @@ app.post("/api/todo", (req, res) => {
   todos.push({
     id: getID(todos),
     title: req.body.title,
-    category: matchCategory(req.body.category),
+    category: matchCategory(Number(req.body.category)),
     status: false,
   }); 
 
@@ -129,18 +129,6 @@ app.put("/api/todo/status", (req, res) => {
   })
 
   res.send(todos);
-})
-
-// GET ALL TODOS for a CATEGORY
-app.get("/api/todos/category", (req, res) => {
-  let newTodos = [];
-  todos.forEach(todo => {
-    if (todos.category.name === req.body.category) {
-      newTodos.push(todo)
-    }
-  })
-
-  res.send(newTodos);
 })
 
 // UPDATE ALL CATEGORIES for each TODO
