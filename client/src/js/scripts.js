@@ -2,66 +2,66 @@ let currentCategory = "all";
 
 let colors = [
   {
-    name: 'Red',
-    class: 'border-red-800',
-    id: 0
+    name: "Red",
+    class: "border-red-800",
+    id: 0,
   },
   {
-    name: 'Amber',
-    class: 'border-amber-600',
-    id: 1
+    name: "Amber",
+    class: "border-amber-600",
+    id: 1,
   },
   {
-    name: 'Yellow',
-    class: 'border-yellow-400',
-    id: 2
+    name: "Yellow",
+    class: "border-yellow-400",
+    id: 2,
   },
   {
-    name: 'Lime',
-    class: 'border-lime-500',
-    id: 3
+    name: "Lime",
+    class: "border-lime-500",
+    id: 3,
   },
   {
-    name: 'Green',
-    class: 'border-green-900',
-    id: 4
+    name: "Green",
+    class: "border-green-900",
+    id: 4,
   },
   {
-    name: 'Sky',
-    class: 'border-sky-400',
-    id: 5
+    name: "Sky",
+    class: "border-sky-400",
+    id: 5,
   },
   {
-    name: 'Blue',
-    class: 'border-blue-800',
-    id: 6
+    name: "Blue",
+    class: "border-blue-800",
+    id: 6,
   },
   {
-    name: 'Violet',
-    class: 'border-violet-400',
-    id: 7
+    name: "Violet",
+    class: "border-violet-400",
+    id: 7,
   },
   {
-    name: 'Purple',
-    class: 'border-purple-900',
-    id: 8
+    name: "Purple",
+    class: "border-purple-900",
+    id: 8,
   },
   {
-    name: 'Fuschia',
-    class: 'border-fuschia-400',
-    id: 9
+    name: "Fuschia",
+    class: "border-fuschia-400",
+    id: 9,
   },
   {
-    name: 'Pink',
-    class: 'border-pink-500',
-    id: 10
+    name: "Pink",
+    class: "border-pink-500",
+    id: 10,
   },
   {
-    name: 'Brown',
-    class: 'border-amber-950',
-    id: 11
+    name: "Brown",
+    class: "border-amber-950",
+    id: 11,
   },
-]
+];
 
 /* Get todos and categories from back end and populate DOM */
 async function getData() {
@@ -104,7 +104,9 @@ function populateDOM(todos, sortCategory) {
   let sortedTodos = [];
   if (currentCategory === "all") sortedTodos = todos;
   else
-    sortedTodos = todos.filter((todo) => todo.category.id === Number(sortCategory));
+    sortedTodos = todos.filter(
+      (todo) => todo.category.id === Number(sortCategory)
+    );
 
   sortedTodos.forEach((todo) => {
     const complete = todo.status ? " todoComplete" : "";
@@ -157,11 +159,11 @@ let colorDropdown = document.querySelector("#colorDropdown");
 
 /* Populate color dropdown for creating a new category */
 function populateColors() {
-  colorDropdown.innerHTML = '<option value="">--Select Color--</option>'
-  colors.forEach(color => {
+  colorDropdown.innerHTML = '<option value="">--Select Color--</option>';
+  colors.forEach((color) => {
     let option = `<option value="${color.id}">${color.name}</option>`;
-    colorDropdown.insertAdjacentHTML('beforeend', option);
-  })
+    colorDropdown.insertAdjacentHTML("beforeend", option);
+  });
 }
 
 populateColors();
@@ -173,6 +175,8 @@ let createBtn = document.querySelector("#createBtn");
 /* Event listener for create button */
 createBtn.addEventListener("click", () => {
   addTodo(textInput.value, selectCategory.value);
+  textInput.value = "";
+  selectCategory.value = "";
   getData();
 });
 
@@ -180,6 +184,8 @@ createBtn.addEventListener("click", () => {
 textInput.addEventListener("keyup", (event) => {
   if (event.keyCode === 13) {
     addTodo(textInput.value, selectCategory.value);
+    textInput.value = "";
+    selectCategory.value = "";
     getData();
   }
 });
@@ -252,10 +258,20 @@ container.addEventListener("click", (event) => {
   else if (buttonType.id === "deleteBtn") deleteTodo(selectedTodo);
 });
 
-// TODO: TOGGLE TODO STATUS
+// TOGGLE TODO STATUS
 
 function toggleStatus(clickedId) {
-  console.log("toggle me");
+  fetch("/api/todo/status", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({
+      id: clickedId,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => populateDOM(data, currentCategory));
 }
 
 // TOGGLE EXTRA FORMS
@@ -273,13 +289,23 @@ toggleBtn.addEventListener("click", () => {
   }
 });
 
-// TODO: DELETE A TODO
+// DELETE A TODO
 
 let clearAll = document.querySelector("#clearDone");
 
 /* Push to the removed todos array and remove from the current todos array */
 function deleteTodo(removeID) {
-  console.log("delete clicked");
+  fetch("/api/todo", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({
+      id: removeID,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => populateDOM(data, currentCategory));
 }
 
 // TODO: EDIT A TODO
@@ -296,6 +322,7 @@ let showAllBtn = document.querySelector("#showAllBtn");
 /* Event listener for the sort button to change the current selected category and repopulate the DOM */
 sortBtn.addEventListener("click", () => {
   currentCategory = sortSelection.value;
+  sortSelection.value = "";
   getData();
 });
 
@@ -305,13 +332,32 @@ showAllBtn.addEventListener("click", () => {
   getData();
 });
 
-// TODO: DELETE A CATEGORY
+// TODO: EDIT A CATEGORY
+
+
+// DELETE A CATEGORY
 
 let deleteCategory = document.querySelector("#deleteBtn");
 
 /* Push deleted category to removed categories array, remove from original categories array */
 deleteCategory.addEventListener("click", () => {
-  console.log("delete category");
+  let deleteId = deleteSelection.value;
+  fetch("/api/category", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({
+      id: deleteId,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      populateDOM(data[0], currentCategory);
+      populateDropdown(data[1]);
+    });
+
+  deleteSelection.value = "";
 });
 
 // CREATE A NEW CATEGORY
@@ -333,6 +379,6 @@ newCatBtn.addEventListener("click", () => {
     .then((res) => res.json())
     .then(getData());
 
-  newName.value = '';
-  colorDropdown.value = '';
+  newName.value = "";
+  colorDropdown.value = "";
 });
