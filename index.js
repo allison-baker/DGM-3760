@@ -121,7 +121,7 @@ app.post("/api/todo", (req, res) => {
   res.send(todos);
 });
 
-// FIXME: PUT (UPDATE) TODOS
+// PUT (UPDATE) TODOS
 app.put("/api/todo", (req, res) => {
   todos.forEach((todo) => {
     if (todo.id === Number(req.body.id)) {
@@ -172,7 +172,7 @@ app.post("/api/category", (req, res) => {
   res.send(categories);
 });
 
-// FIXME: PUT (UPDATE) CATEGORIES
+// PUT (UPDATE) CATEGORIES
 app.put("/api/category", (req, res) => {
   categories.forEach((category) => {
     if (category.id === req.body.id) {
@@ -181,7 +181,11 @@ app.put("/api/category", (req, res) => {
     }
   });
 
-  res.send(categories);
+  todos.forEach((todo) => {
+    todo.category = matchCategory(todo.category.id);
+  });
+
+  res.send([todos, categories]);
 });
 
 // DELETE CATEGORIES

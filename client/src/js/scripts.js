@@ -47,8 +47,8 @@ let colors = [
     id: 8,
   },
   {
-    name: "Fuschia",
-    class: "border-fuschia-400",
+    name: "Fuchsia",
+    class: "border-fuchsia-400",
     id: 9,
   },
   {
@@ -115,7 +115,7 @@ function populateDOM(todos, sortCategory) {
 
     const li = `<div class="border-l-8 ${todo.category.color.class}${complete}${categoryExists} my-2 bg-slate-100 rounded-md flex justify-between" data-todoid="${todo.id}">
                   <section>
-                    <p class="p-3 cursor-pointer" contenteditable="true">${todo.title}</p>
+                    <p class="p-3 cursor-pointer">${todo.title}</p>
                     <input type="text" value="" class="p-2 rounded-md m-2 hidden" />
                   </section>
                   <section class="text-white rounded-md cursor-pointer grid gap-0 grid-cols-2">
@@ -139,6 +139,8 @@ function populateDOM(todos, sortCategory) {
 let selectCategory = document.querySelector("#todoCategory");
 let sortSelection = document.querySelector("#sortSelect");
 let deleteSelection = document.querySelector("#deleteSelect");
+let updateSelection = document.querySelector("#updateTodoCategory");
+let updateCatSelection = document.querySelector("#updateCatSelection");
 
 /* Dynamically populate the category dropdowns so if the user adds/deletes categories it updates */
 function populateDropdown(categories) {
@@ -146,23 +148,33 @@ function populateDropdown(categories) {
   sortSelection.innerHTML =
     "<option value='all'>--Filter by Category--</option>";
   deleteSelection.innerHTML = "<option value=''>--Delete a Category--</option";
+  updateSelection.innerHTML =
+    "<option value=''>--Choose New Category--</option>";
+  updateCatSelection.innerHTML =
+    "<option value=''>--Category to Update--</option>";
 
   categories.forEach((category) => {
     let option = `<option value="${category.id}">${category.name}</option>`;
     selectCategory.insertAdjacentHTML("beforeend", option);
     sortSelection.insertAdjacentHTML("beforeend", option);
     deleteSelection.insertAdjacentHTML("beforeend", option);
+    updateSelection.insertAdjacentHTML("beforeend", option);
+    updateCatSelection.insertAdjacentHTML("beforeend", option);
   });
 }
 
 let colorDropdown = document.querySelector("#colorDropdown");
+let updateCatColor = document.querySelector("#updateCatColor");
 
 /* Populate color dropdown for creating a new category */
 function populateColors() {
-  colorDropdown.innerHTML = '<option value="">--Select Color--</option>';
+  colorDropdown.innerHTML = "<option value=''>--Select Color--</option>";
+  updateCatColor.innerHTML = "<option value=''>--New Color--</option>";
+
   colors.forEach((color) => {
     let option = `<option value="${color.id}">${color.name}</option>`;
     colorDropdown.insertAdjacentHTML("beforeend", option);
+    updateCatColor.insertAdjacentHTML("beforeend", option);
   });
 }
 
@@ -215,7 +227,7 @@ container.addEventListener("click", (event) => {
   let selectedTodo = Number(item.closest("div").dataset.todoid);
 
   // Toggle todo status if clicked anything but a button
-  if (item.localName != "button" && item.localName != "i" && item.localName != "p") {
+  if (item.localName != "button" && item.localName != "i") {
     toggleStatus(selectedTodo);
     return;
   }
@@ -291,14 +303,47 @@ clearAll.addEventListener("click", () => {
     .then((data) => populateDOM(data, currentCategory));
 });
 
-// TODO: EDIT A TODO
-// textInput and selectCategory and createBtn
-let editTodoBtn = document.querySelector("#editTodoBtn");
+// EDIT A TODO
+
+let updateTodo = document.querySelector("#updateTodoBtn");
+let updateTodoForm = document.querySelector("#updateTodoForm");
+let updateTodoName = document.querySelector("#updateTodoName");
+let currentlyEditing = NaN;
 
 /* Get todos, find the todo to edit, change the button, and call the edit function */
 function editTodo(editId) {
-  console.log(editId);
+  fetch("/api/todos")
+    .then((res) => res.json())
+    .then((data) => {
+      currentTodo = data.filter((todo) => todo.id === Number(editId));
+      updateTodoName.value = currentTodo[0].title;
+      updateSelection.value = currentTodo[0].category.id;
+      updateTodoForm.classList.toggle("hidden");
+      currentlyEditing = Number(editId);
+    });
 }
+
+/* Add event listener to update todo button to update information */
+updateTodo.addEventListener("click", () => {
+  fetch("/api/todo", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({
+      id: currentlyEditing,
+      newTitle: updateTodoName.value,
+      categoryId: updateSelection.value,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      updateTodoName.value = "";
+      updateSelection.value = "";
+      updateTodoForm.classList.toggle("hidden");
+      populateDOM(data, currentCategory);
+    });
+});
 
 // SORT BY CATEGORY
 
@@ -318,7 +363,54 @@ showAllBtn.addEventListener("click", () => {
   getData();
 });
 
-// TODO: EDIT A CATEGORY
+// EDIT A CATEGORY
+
+let updateCatName = document.querySelector("#updateCatName");
+let categoryToEditBtn = document.querySelector("#selectCatUpdateBtn");
+let updateCatForm = document.querySelector("#updateCatForm");
+let categoryToEdit;
+let updateCatBtn = document.querySelector("#updateCatBtn");
+
+/* Add event listener for the select category to edit button */
+categoryToEditBtn.addEventListener("click", () => {
+  fetch("/api/categories")
+    .then((res) => res.json())
+    .then((data) => {
+      categoryToEdit = data.filter(
+        (category) => category.id === Number(updateCatSelection.value)
+      );
+      updateCatSelection.value = "";
+      updateCatForm.classList.toggle("hidden");
+      updateCatName.value = categoryToEdit[0].name;
+      updateCatColor.value = categoryToEdit[0].color.id;
+    });
+});
+
+/* Add event listener for the update category button */
+updateCatBtn.addEventListener("click", () => {
+  fetch("/api/category", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({
+      id: categoryToEdit[0].id,
+      newName: updateCatName.value,
+      newColor: colors[Number(updateCatColor.value)],
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      populateDOM(data[0], currentCategory);
+      populateDropdown(data[1]);
+      categoryToEdit = [];
+      updateCatName.value = "";
+      updateCatColor.value = "";
+      updateCatSelection.value = "";
+      updateCatForm.classList.toggle("hidden");
+    });
+});
 
 // DELETE A CATEGORY
 

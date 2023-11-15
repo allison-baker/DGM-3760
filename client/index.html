@@ -21,7 +21,7 @@
   </head>
   <body class="bg-slate-800">
     <main class="h-full py-[100px]">
-      <div class="w-1/2 p-4 bg-white rounded-md mx-auto">
+      <div class="w-2/3 p-4 bg-white rounded-md mx-auto">
         <h1 class="text-4xl font-bold">Todo App</h1>
 
         <section class="my-4">
@@ -87,7 +87,7 @@
           <div class="my-4 flex flex-row items-center">
             <input
               type="text"
-              placeholder="New Name"
+              placeholder="New Category Name"
               class="bg-slate-100 p-2 rounded-md mr-3"
               id="newCatName"
               value=""
@@ -103,6 +103,57 @@
               Create Category
             </button>
           </div>
+          <div class="my-4">
+            <select
+              id="updateCatSelection"
+              class="bg-slate-100 p-2 rounded-md mr-2"
+            ></select>
+            <button
+              id="selectCatUpdateBtn"
+              class="btn bg-slate-800 p-2 rounded-md text-white"
+            >
+              Edit this Category
+            </button>
+          </div>
+          <div class="my-4 hidden" id="updateCatForm">
+            <input
+              type="text"
+              id="updateCatName"
+              placeholder="Update Category Name"
+              value=""
+              class="bg-slate-100 p-2 rounded-md mr-2"
+            />
+            <select
+              id="updateCatColor"
+              class="bg-slate-100 p-2 rounded-md mr-2"
+            ></select>
+            <button
+              id="updateCatBtn"
+              class="btn bg-slate-800 p-2 rounded-md text-white"
+            >
+              Update Category
+            </button>
+          </div>
+        </section>
+
+        <section class="my-4 hidden" id="updateTodoForm">
+          <input
+            type="text"
+            id="updateTodoName"
+            placeholder="Update Todo Name"
+            value=""
+            class="bg-slate-100 p-2 rounded-md mr-2"
+          />
+          <select
+            id="updateTodoCategory"
+            class="bg-slate-100 p-2 rounded-md mr-2"
+          ></select>
+          <button
+            id="updateTodoBtn"
+            class="btn bg-slate-800 p-2 rounded-md text-white"
+          >
+            Update Todo
+          </button>
         </section>
 
         <section class="flex justify-between items-center">
