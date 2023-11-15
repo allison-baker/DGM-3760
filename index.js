@@ -6,42 +6,42 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(express.static('client'));
+app.use(express.static("client"));
 
 let categories = [
   {
     name: "Personal",
     color: {
-      name: 'Purple',
-      class: 'border-purple-900',
-      id: 8
+      name: "Purple",
+      class: "border-purple-900",
+      id: 8,
     },
     id: 0,
   },
   {
     name: "Homework",
     color: {
-      name: 'Red',
-      class: 'border-red-800',
-      id: 0
+      name: "Red",
+      class: "border-red-800",
+      id: 0,
     },
     id: 1,
   },
   {
     name: "Work",
     color: {
-      name: 'Sky',
-      class: 'border-sky-400',
-      id: 5
+      name: "Sky",
+      class: "border-sky-400",
+      id: 5,
     },
     id: 2,
   },
   {
     name: "Chores",
     color: {
-      name: 'Lime',
-      class: 'border-lime-500',
-      id: 3
+      name: "Lime",
+      class: "border-lime-500",
+      id: 3,
     },
     id: 3,
   },
@@ -96,10 +96,10 @@ function matchCategory(id) {
     match = {
       name: "None",
       color: {
-        class: 'border-slate-800',
+        class: "border-slate-800",
       },
       id: null,
-    }
+    };
   }
   return match;
 }
@@ -116,43 +116,50 @@ app.post("/api/todo", (req, res) => {
     title: req.body.title,
     category: matchCategory(Number(req.body.category)),
     status: false,
-  }); 
+  });
 
   res.send(todos);
 });
 
 // FIXME: PUT (UPDATE) TODOS
 app.put("/api/todo", (req, res) => {
-  todos.forEach(todo => {
-    if (todo.id === req.body.id) {
+  todos.forEach((todo) => {
+    if (todo.id === Number(req.body.id)) {
       todo.title = req.body.newTitle;
-      todo.category = matchCategory(req.body.newCategory);
+      todo.category = matchCategory(Number(req.body.categoryId));
     }
-  })
+  });
 
   res.send(todos);
-})
+});
 
 // DELETE TODO
 app.delete("/api/todo", (req, res) => {
-  todos = todos.filter(todo => todo.id != req.body.id);
+  todos = todos.filter((todo) => todo.id != req.body.id);
 
   res.send(todos);
-})
+});
+
+// DELETE ALL DONE TODOS
+app.delete("/api/todo/status", (req, res) => {
+  todos = todos.filter((todo) => !todo.status);
+
+  res.send(todos);
+});
 
 // PUT (UPDATE) TODO STATUS
 app.put("/api/todo/status", (req, res) => {
-  todos.forEach(todo => {
+  todos.forEach((todo) => {
     if (todo.id === Number(req.body.id)) todo.status = !todo.status;
-  })
+  });
 
   res.send(todos);
-})
+});
 
 // GET CATEGORIES
 app.get("/api/categories", (req, res) => {
   res.send(categories);
-})
+});
 
 // POST CATEGORIES
 app.post("/api/category", (req, res) => {
@@ -160,33 +167,35 @@ app.post("/api/category", (req, res) => {
     id: getID(categories),
     name: req.body.name,
     color: req.body.color,
-  })
+  });
 
   res.send(categories);
-})
+});
 
 // FIXME: PUT (UPDATE) CATEGORIES
 app.put("/api/category", (req, res) => {
-  categories.forEach(category => {
+  categories.forEach((category) => {
     if (category.id === req.body.id) {
       category.name = req.body.newName;
       category.color = req.body.newColor;
     }
-  })
+  });
 
   res.send(categories);
-})
+});
 
 // DELETE CATEGORIES
 app.delete("/api/category", (req, res) => {
-  categories = categories.filter(category => category.id != Number(req.body.id));
-  
-  todos.forEach(todo => {
+  categories = categories.filter(
+    (category) => category.id != Number(req.body.id)
+  );
+
+  todos.forEach((todo) => {
     todo.category = matchCategory(todo.category.id);
-  })
+  });
 
   res.send([todos, categories]);
-})
+});
 
 // LISTEN
 app.listen(port, () => {

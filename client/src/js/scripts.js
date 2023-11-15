@@ -115,7 +115,7 @@ function populateDOM(todos, sortCategory) {
 
     const li = `<div class="border-l-8 ${todo.category.color.class}${complete}${categoryExists} my-2 bg-slate-100 rounded-md flex justify-between" data-todoid="${todo.id}">
                   <section>
-                    <p class="p-3 cursor-pointer">${todo.title}</p>
+                    <p class="p-3 cursor-pointer" contenteditable="true">${todo.title}</p>
                     <input type="text" value="" class="p-2 rounded-md m-2 hidden" />
                   </section>
                   <section class="text-white rounded-md cursor-pointer grid gap-0 grid-cols-2">
@@ -192,34 +192,6 @@ textInput.addEventListener("keyup", (event) => {
 
 // CREATE A NEW TODO
 
-/* Calculate id number - makes sure each id number is unique even if items have been added/deleted
-New id number is higher than any other number currently in the array */
-function getID(array) {
-  let newID = 0;
-  array.forEach((item) => {
-    if (item.id > newID) newID = item.id;
-  });
-  return newID + 1;
-}
-
-/* Find a matching category in the categories array or return category none */
-function matchCategory(id) {
-  let match;
-  categories.forEach((category) => {
-    if (id === category.id) {
-      match = category;
-    }
-  });
-  if (!match) {
-    match = {
-      name: "None",
-      color: "#170312",
-      ID: -1,
-    };
-  }
-  return match;
-}
-
 /* Add new todo object to the array */
 async function addTodo(title, category) {
   fetch("/api/todo", {
@@ -243,7 +215,7 @@ container.addEventListener("click", (event) => {
   let selectedTodo = Number(item.closest("div").dataset.todoid);
 
   // Toggle todo status if clicked anything but a button
-  if (item.localName != "button" && item.localName != "i") {
+  if (item.localName != "button" && item.localName != "i" && item.localName != "p") {
     toggleStatus(selectedTodo);
     return;
   }
@@ -291,9 +263,7 @@ toggleBtn.addEventListener("click", () => {
 
 // DELETE A TODO
 
-let clearAll = document.querySelector("#clearDone");
-
-/* Push to the removed todos array and remove from the current todos array */
+/* Remove the selected todo from the todos array */
 function deleteTodo(removeID) {
   fetch("/api/todo", {
     method: "DELETE",
@@ -308,10 +278,26 @@ function deleteTodo(removeID) {
     .then((data) => populateDOM(data, currentCategory));
 }
 
-// TODO: EDIT A TODO
+// DELETE ALL DONE TODOS
 
-function editTodo(editID) {
-  console.log("edit clicked");
+let clearAll = document.querySelector("#clearDone");
+
+/* Remove all todos with a status of complete */
+clearAll.addEventListener("click", () => {
+  fetch("/api/todo/status", {
+    method: "DELETE",
+  })
+    .then((res) => res.json())
+    .then((data) => populateDOM(data, currentCategory));
+});
+
+// TODO: EDIT A TODO
+// textInput and selectCategory and createBtn
+let editTodoBtn = document.querySelector("#editTodoBtn");
+
+/* Get todos, find the todo to edit, change the button, and call the edit function */
+function editTodo(editId) {
+  console.log(editId);
 }
 
 // SORT BY CATEGORY
@@ -322,7 +308,7 @@ let showAllBtn = document.querySelector("#showAllBtn");
 /* Event listener for the sort button to change the current selected category and repopulate the DOM */
 sortBtn.addEventListener("click", () => {
   currentCategory = sortSelection.value;
-  sortSelection.value = "";
+  sortSelection.value = "all";
   getData();
 });
 
@@ -333,7 +319,6 @@ showAllBtn.addEventListener("click", () => {
 });
 
 // TODO: EDIT A CATEGORY
-
 
 // DELETE A CATEGORY
 
