@@ -13,13 +13,9 @@ DELETE will remove a todo from the todos array.
 
 ## /api/todo/status
 
-This endpoint has one method, PUT, which toggles the status of a todo.
-
-## /api/todos/category
-
-This endpoint has a GET and a PUT method.  
-GET will return all todos of a certain category.  
-PUT will iterate through the todos array and check that they all have an existing category assigned to them, else assign category none.
+This endpoint has a PUT and DELETE method.  
+PUT will toggle the status of a todo.
+DELETE will remove all todos with a status of complete.
 
 ## /api/categories
 
