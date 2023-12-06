@@ -24,6 +24,6 @@ This endpoint has one method, GET, which returns the categories array.
 ## /api/category
 
 This endpoint has a POST, PUT, and DELETE method.  
-POST will create a new category.
+POST will create a new category.  
 PUT will update the name or color of an existing category.  
 DELETE will remove a category from the categories array.
