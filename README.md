@@ -14,7 +14,7 @@ DELETE will remove a todo from the todos array.
 ## /api/todo/status
 
 This endpoint has a PUT and DELETE method.  
-PUT will toggle the status of a todo.
+PUT will toggle the status of a todo.  
 DELETE will remove all todos with a status of complete.
 
 ## /api/categories
